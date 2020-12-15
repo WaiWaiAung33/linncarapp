@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import Moment from "moment";
 
 export default class HistoryCard extends React.Component {
     _onPress(){
@@ -16,7 +17,7 @@ export default class HistoryCard extends React.Component {
             <Image source={require("@images/car.png")} />
           </View>
           <View style={{ justifyContent: "center", paddingLeft: 10 }}>
-            <Text>5p/4551999</Text>
+          <Text>{this.props.carno}</Text>
           </View>
           <View
             style={{
@@ -25,7 +26,7 @@ export default class HistoryCard extends React.Component {
               flex: 1,
             }}
           >
-            <Text>5p/4551</Text>
+            <Text>{Moment(this.props.date).format("DD-MM-YYYY")}1</Text>
           </View>
         </View>
         </TouchableOpacity>

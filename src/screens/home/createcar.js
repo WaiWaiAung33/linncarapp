@@ -164,7 +164,7 @@ GetTime() {
     };
     const formData = new FormData();
     const { imagePath } = self.state;
-    formData.append("car_id", this.state.carno.value);
+    formData.append("car_id", self.state.carno.value);
     formData.append("driver_id", self.state.dirverid);
     formData.append("start_place", self.state.startplace);
     formData.append("reason", self.state.reason);
@@ -188,10 +188,10 @@ GetTime() {
       headers,
     }) 
     .then(function(response){
-      this.setState({isOpenSuccessModel:true})
+      self.setState({isOpenSuccessModel:true})
     })
     .catch(function(err){
-        this.setState({isOpenSuccessModel:false})
+        self.setState({isOpenSuccessModel:false})
     })
 }
 
@@ -209,7 +209,10 @@ GetTime() {
 
     //on close
     _handleOnClose() {
-      this.setState({ isOpenSuccessModel: false });
+      this.setState({
+        isOpenSuccessModel:false
+      })
+      this.props.navigation.navigate("CarList");
     }
 
 

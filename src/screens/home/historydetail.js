@@ -27,7 +27,7 @@ export default class HistoryDetail extends React.Component{
                     <Text style={styles.labelStyle}>Car No</Text>
                 </View>
                 <View style={styles.textInputContainer}>
-                <DropDown
+                {/* <DropDown
                 //   value={this.state.branch}
                   widthContainer="100%"
                 //   options={this.state.branches}
@@ -35,7 +35,7 @@ export default class HistoryDetail extends React.Component{
                 //     this._handleOnSelectBranch(value, label)
                 //   }
                   placeholder="Select Branch..."
-                ></DropDown>
+                ></DropDown> */}
                 </View>
             </View>
 

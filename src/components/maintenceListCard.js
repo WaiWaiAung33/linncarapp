@@ -1,6 +1,8 @@
 import React from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 
+import Moment from "moment";
+
 export default class RefuelCard extends React.Component {
     _onPress(){
         if(this.props.OnPress){
@@ -11,7 +13,7 @@ export default class RefuelCard extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.firstContainer}>
-          <Text style={{ textAlign: "right" }}>01-12-2020</Text>
+          <Text style={{ textAlign: "right" }}>{Moment(this.props.date).format("DD-MM-YYYY")}</Text>
           <View style={styles.secondContainer}>
       
             <View style={{ marginLeft: 15 }}>
@@ -21,10 +23,10 @@ export default class RefuelCard extends React.Component {
               <Text style={styles.text}>Reason</Text>
             </View>
             <View style={{ marginLeft: 15 }}>
-              <Text style={styles.text}>3Q/4451</Text>
-              <Text style={styles.text}>U Kyaw Min Htun</Text>
-              <Text style={styles.text}>22000</Text>
-              <Text style={styles.text}>test</Text>
+              <Text style={styles.text}>{this.props.carno}</Text>
+              <Text style={styles.text}>{this.props.name}</Text>
+              <Text style={styles.text}>{this.props.price}</Text>
+              <Text style={styles.text}>{this.props.reason}</Text>
             </View>
             <View
               style={{

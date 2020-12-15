@@ -107,7 +107,7 @@ export default class OTPCode extends React.Component {
         if (response.data.status == 1) {
           // alert(response.data.user.id.toString());
           if (response.data.status === 1) {
-            var userid = response.data.user.id.toString();
+            var userid = response.data.user.driverId.toString();
             console.log("User Id", userid);
             AsyncStorage.multiSet(
               [
@@ -278,7 +278,7 @@ const styles = StyleSheet.create({
   },
   secondContainer: {
     height: 300,
-    backgroundColor: "#308DCC",
+    backgroundColor: "#3D73D5",
     alignItems: "center",
   },
   imgHeader: {
@@ -328,8 +328,8 @@ const styles = StyleSheet.create({
     margin: 15,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#308DCC",
-    borderColor: "#308DCC",
+    backgroundColor: "#3D73D5",
+    borderColor: "#3D73D5",
     borderRadius: 5,
     elevation: 5,
     //   backgroundColor:"white",

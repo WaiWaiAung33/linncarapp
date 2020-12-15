@@ -48,7 +48,6 @@ export default class CarList extends React.Component {
   }
 
   //call api
-
   _getCarlist = async (page) => {
     var self = this;
     const url = CarlistApi + page;

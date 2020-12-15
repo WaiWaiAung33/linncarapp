@@ -1,5 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import Moment from "moment";
+import { ImguploadApi } from "@api/Url";
 
 export default class RefuelCard extends React.Component {
     _onPress(){
@@ -8,15 +10,19 @@ export default class RefuelCard extends React.Component {
         }
     }
   render() {
+    // console.log(ImguploadApi + this.props.photo,);
     return (
       <View style={styles.container}>
         <View style={styles.firstContainer}>
-          <Text style={{ textAlign: "right" }}>01-12-2020</Text>
+          <Text style={{ textAlign: "right" }}> {Moment(this.props.date).format("DD-MM-YYYY")}</Text>
           <View style={styles.secondContainer}>
             <View>
               <Image
-                source={require("@images/car.png")}
-                style={{ width: 100 }}
+                  source={{
+                    uri:
+                     ImguploadApi + this.props.photo
+                  }}
+                style={{ width: 100,height:100 }}
               />
             </View>
             <View style={{ marginLeft: 15 }}>
@@ -25,9 +31,9 @@ export default class RefuelCard extends React.Component {
               <Text style={styles.text}>Price</Text>
             </View>
             <View style={{ marginLeft: 15 }}>
-              <Text style={styles.text}>3Q/4451</Text>
-              <Text style={styles.text}>158666</Text>
-              <Text style={styles.text}>22000</Text>
+              <Text style={styles.text}>{this.props.carno}</Text>
+              <Text style={styles.text}>{this.props.kilo}</Text>
+              <Text style={styles.text}>{this.props.price}</Text>
             </View>
             <View
               style={{

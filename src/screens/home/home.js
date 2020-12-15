@@ -30,7 +30,7 @@ export default class Home extends React.Component {
     const name = await AsyncStorage.getItem("name");
     const access_token = await AsyncStorage.getItem("access_token");
     const userid = await AsyncStorage.getItem("userid");
-    console.log(name);
+    // console.log(name);
     const phoneno = await AsyncStorage.getItem("loginID");
     this.setState({
       name: name,
@@ -46,7 +46,7 @@ export default class Home extends React.Component {
   _getTimeOut = async (page) => {
     var self = this;
     const url = TimeoutApi + self.state.driverid;
-    console.log(url);
+    // console.log(url);
     axios
       .get(url, {
         headers: {
@@ -55,14 +55,14 @@ export default class Home extends React.Component {
         },
       })
       .then(function (response) {
-        console.log("Time Out Api", response.data);
+        // console.log("Time Out Api", response.data);
         self.setState({
           carno: response.data.car_no,
           status: response.data.staus,
         });
       })
       .catch(function (err) {
-        console.log("Time Out Error", err);
+        // console.log("Time Out Error", err);
       });
   };
 
@@ -71,7 +71,7 @@ export default class Home extends React.Component {
     this.props.navigation.navigate("Login");
   }
   render() {
-    console.log(this.state.status);
+    // console.log(this.state.status);
     return (
       <View style={styles.container}>
         <StatusBar style="auto" />
