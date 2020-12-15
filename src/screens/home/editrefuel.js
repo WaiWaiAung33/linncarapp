@@ -49,7 +49,7 @@ export default class EditRefuel extends React.Component {
       Kilo:this.props.navigation.getParam("data").kilo,
       price:this.props.navigation.getParam("data").price,
       carno: {
-        value: this.props.navigation.getParam("data").id,
+        value: this.props.navigation.getParam("data").car_id,
         label: this.props.navigation.getParam("data").car_no,
       },
       imagePath: ImguploadApi + this.props.navigation.getParam("data").photo
@@ -152,7 +152,7 @@ export default class EditRefuel extends React.Component {
       <View style={styles.container}>
         <View style={styles.formContainer}>
           <View style={styles.textContainer}>
-            <Text style={styles.labelStyle}>Driver Name</Text>
+            <Text style={styles.labelStyle}>Car No</Text>
           </View>
           <View style={styles.textInputContainer}>
             <DropDown
@@ -169,7 +169,7 @@ export default class EditRefuel extends React.Component {
 
         <View style={styles.formContainer}>
           <View style={styles.textContainer}>
-            <Text style={styles.labelStyle}>Car No</Text>
+            <Text style={styles.labelStyle}>Driver Name</Text>
           </View>
           <View style={styles.textInputContainer}>
             <TextInput

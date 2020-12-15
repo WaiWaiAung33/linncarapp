@@ -1,11 +1,62 @@
 import React from "react";
-import {View,Text,ScrollView,StyleSheet,TextInput,TouchableOpacity} from "react-native";
+import {View,Text,ScrollView,StyleSheet,TextInput,AsyncStorage} from "react-native";
 
 //import components
 import DropDown from "@components/DropDown";
 import ImgUploadBtn from "@components/ImgUploadBtn";
 
+//import api
+const axios = require("axios");
+import { gethistorydetailapi } from "@api/Url";
+
 export default class HistoryDetail extends React.Component{
+    constructor(props) {
+        super(props);
+        this.state = {
+          access_token: null,
+          dirverid: null,
+          data: [],
+        
+        };
+        // this.page = 1;
+      }
+
+      async componentDidMount() {
+        const access_token = await AsyncStorage.getItem("access_token");
+        const userid = await AsyncStorage.getItem("userid");
+        this.setState({
+          access_token: access_token,
+          dirverid: userid,
+        });
+    
+        await this._gethistory();
+      }
+
+            //call api
+  _gethistory = async () => {
+    var self = this;
+    const url = gethistorydetailapi + self.state.dirverid;
+    console.log(url);
+    axios
+      .get(url, {
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer " + self.state.access_token,
+        },
+      })
+      .then(function (response) {
+        console.log(response.data);
+        // self.setState({
+        //   data:response.data.data.data,
+         
+        // });
+      })
+      .catch(function (err) {
+
+        console.log("History Error", err);
+      });
+  };
+
     render(){
         return(
             <View style={styles.container}>

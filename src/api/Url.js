@@ -35,6 +35,7 @@ export const MaintenceListApi  = BaseUrl + "getallMaintenance?driverId=";
 
 //get history api
 export const gethistoryapi  = BaseUrl + "getAllHistory?driverId=";
+export const gethistorydetailapi  = BaseUrl + "report?driverId=";
 
 
 
