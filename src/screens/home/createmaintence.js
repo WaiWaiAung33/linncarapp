@@ -1,76 +1,186 @@
 import React from "react";
-import {View,Text,ScrollView,StyleSheet,TextInput,TouchableOpacity} from "react-native";
+import {View,Text,ScrollView,StyleSheet,TextInput,TouchableOpacity,AsyncStorage} from "react-native";
 
 //import components
 import DropDown from "@components/DropDown";
 import ImgUploadBtn from "@components/ImgUploadBtn";
+import SuccessModal from "@components/SuccessModal";
+
+//import api
+const axios = require("axios");
+import { CarlistApi, createmaintenceapi } from "@api/Url";
+import FormData from "form-data";
 
 export default class CreateMaintence extends React.Component{
+  constructor(props) {
+    super(props);
+    this.state = {
+      carno: { value: null, label: null },
+      Carno: [],
+      access_token: null,
+      dirvername: null,
+      amount:null,
+      reason:null,
+       imagePath: null,
+      dirverid: null,
+      isOpenSuccessModel: false,
+    };
+    this.page = 0;
+  }
+
+  async componentDidMount() {
+    const access_token = await AsyncStorage.getItem("access_token");
+    const dirvername = await AsyncStorage.getItem("name");
+    const dirver = await AsyncStorage.getItem("userid");
+    this.setState({
+      access_token: access_token,
+      dirvername: dirvername,
+      dirverid: dirver,
+    });
+
+    await this._getCarlist(this.page);
+  }
+
+
+  //create car report
+  _handleOnSave = async () => {
+    const self = this;
+    const headers = {
+      Accept: "application/json",
+      Authorization: "Bearer " + self.state.access_token,
+      "Content-Type": "multipart/form-data",
+    };
+    const formData = new FormData();
+    const { imagePath } = self.state;
+    formData.append("car_no", self.state.carno.value);
+    formData.append("driver_name", self.state.dirverid);
+    formData.append("reason", self.state.reason);
+    formData.append("amount", self.state.amount);
+    if (imagePath) {
+      const uriPart = imagePath.split(".");
+      const fileExtension = uriPart[uriPart.length - 1];
+      const fileName = imagePath.substr(imagePath.lastIndexOf("/") + 1);
+
+      formData.append("vPhoto", {
+        uri: imagePath,
+        name: fileName,
+        type: `image/${fileExtension}`,
+      });
+    }
+    console.log(formData);
+    const url = createmaintenceapi;
+    console.log(url);
+    axios
+      .post(createmaintenceapi, formData, {
+        headers,
+      })
+      .then(function (response) {
+        console.log(response.data);
+        self.setState({ isOpenSuccessModel: true });
+      })
+      .catch(function (err) {
+        console.log("Create Maintenance Error",err);
+        self.setState({ isOpenSuccessModel: false });
+      });
+  };
+
+  //call api
+  _getCarlist = async (page) => {
+    var self = this;
+    const url = CarlistApi + page;
+    // console.log(self.state.search);
+    axios
+      .get(url, {
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer " + self.state.access_token,
+        },
+      })
+      .then(function (response) {
+        // console.log(response.data);
+        let carno = response.data.car_list;
+        let arr = [];
+        carno.map((data, index) => {
+          var obj = { value: data.id.toString(), label: data.car_no };
+          arr.push(obj);
+        });
+        self.setState({
+          Carno: arr,
+        });
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  };
+
+  //handle usertype
+  _handleOnSelectCarno(value, label) {
+    this.setState({
+      carno: { value: value, label: label },
+    });
+  }
+
+  //image
+  _handleOnChooseImage(image) {
+    this.setState({ imagePath: image.uri });
+  }
+
+  //on close
+  _handleOnClose() {
+    this.setState({
+      isOpenSuccessModel:false
+    })
+    this.props.navigation.navigate("MaintenceList");
+  }
+
     render(){
         return(
             <View style={styles.container}>
 
              <View style={styles.formContainer}>
                 <View style={styles.textContainer}>
-                    <Text style={styles.labelStyle}>Driver Name</Text>
-                </View>
-                <View style={styles.textInputContainer}>
-                    <TextInput
-                    // keyboardType="number-pad"
-                    style={styles.textInputStyle}
-                    ></TextInput>
-                </View>
-            </View>
-
-            <View style={styles.formContainer}>
-                <View style={styles.textContainer}>
                     <Text style={styles.labelStyle}>Car No</Text>
                 </View>
                 <View style={styles.textInputContainer}>
-                <DropDown
-                //   value={this.state.branch}
-                  widthContainer="100%"
-                //   options={this.state.branches}
-                //   onSelect={(value, label) =>
-                //     this._handleOnSelectBranch(value, label)
-                //   }
-                  placeholder="Select Branch..."
-                ></DropDown>
+                  <DropDown
+                    value={this.state.carno}
+                    widthContainer="100%"
+                    options={this.state.Carno}
+                    onSelect={(value, label) =>
+                      this._handleOnSelectCarno(value, label)
+                    }
+                    placeholder="Select car_no..."
+                  ></DropDown>
                 </View>
             </View>
 
             <View style={styles.formContainer}>
                 <View style={styles.textContainer}>
-                    <Text style={styles.labelStyle}>Start Time</Text>
+                    <Text style={styles.labelStyle}>Dirver Name</Text>
                 </View>
                 <View style={styles.textInputContainer}>
-                    <TextInput
+                <TextInput
+                value={this.state.dirvername}
+                editable={false}
                     // keyboardType="number-pad"
                     style={styles.textInputStyle}
                     ></TextInput>
+               
                 </View>
             </View>
 
-            <View style={styles.formContainer}>
-                <View style={styles.textContainer}>
-                    <Text style={styles.labelStyle}>Start Place</Text>
-                </View>
-                <View style={styles.textInputContainer}>
-                    <TextInput
-                    // keyboardType="number-pad"
-                    style={styles.textInputStyle}
-                    ></TextInput>
-                </View>
-            </View>
+           
 
             <View style={styles.formContainer}>
                 <View style={styles.textContainer}>
-                    <Text style={styles.labelStyle}>Usage Name</Text>
+                    <Text style={styles.labelStyle}>Amount</Text>
                 </View>
                 <View style={styles.textInputContainer}>
                     <TextInput
+                    value={this.state.amount}
                     // keyboardType="number-pad"
                     style={styles.textInputStyle}
+                    onChangeText={(value)=>this.setState({amount:value})}
                     ></TextInput>
                 </View>
             </View>
@@ -81,50 +191,43 @@ export default class CreateMaintence extends React.Component{
                 </View>
                 <View style={styles.textInputContainer}>
                     <TextInput
+                    value={this.state.reason}
                     // keyboardType="number-pad"
                     style={styles.textAreaStyle}
+                    onChangeText={(value)=>this.setState({reason:value})}
                     ></TextInput>
                 </View>
             </View>
 
             <View style={styles.formContainer}>
                 <View style={styles.textContainer}>
-                    <Text style={styles.labelStyle}>Start Kilo</Text>
+                    <Text style={styles.labelStyle}>Voucher</Text>
                 </View>
-                <View style={styles.textInputContainer}>
-                    <TextInput
-                    // keyboardType="number-pad"
-                    style={styles.textInputStyle}
-                    ></TextInput>
-                </View>
-            </View>
-
-            <View style={styles.formContainer}>
-                <View style={styles.textContainer}>
-                    <Text style={styles.labelStyle}>Start Kilo Photo</Text>
-                </View>
-                {/* <View style={styles.textInputContainer}> */}
-                    <ImgUploadBtn
-                    // imagePath={this.state.imagePath}
-                    // onChooseImage={this._handleOnChooseImage.bind(this)}
-                     />
-                {/* </View> */}
+                <View style={{ flex: 1 }}>
+                <ImgUploadBtn
+                  imagePath={this.state.imagePath}
+                  onChooseImage={this._handleOnChooseImage.bind(this)}
+                />
+              </View>
             </View>
 
             <View style={styles.formContainer}>
               <View style={styles.textContainer}></View>
               <View style={styles.btnContainer}>
-                {/* <TouchableOpacity style={styles.backBtn}>
-                  <Text style={styles.btnText}>Back</Text>
-                </TouchableOpacity> */}
                 <TouchableOpacity
                   style={styles.saveBtn}
-                //   onPress={() => this.createSimcard()}
+                  onPress={() => this._handleOnSave()}
                 >
-                  <Text style={styles.btnText}>Submit</Text>
+                  <Text style={{color:"white"}}>Save</Text>
                 </TouchableOpacity>
               </View>
             </View>
+
+            <SuccessModal
+            isOpen={this.state.isOpenSuccessModel}
+            text="Successfully maintenance created"
+            onClose={() => this._handleOnClose()}
+          />
 
             </View>
         )

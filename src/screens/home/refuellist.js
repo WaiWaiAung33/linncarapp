@@ -29,7 +29,7 @@ export default class RefuelList extends React.Component {
       data: [],
       refreshing: false,
       isFooterLoading: false,
-      isLoading: false,
+      isLoading: true,
       arrIndex: null,
       photo:null,
       imagePath:null
@@ -73,7 +73,7 @@ export default class RefuelList extends React.Component {
           // data: [...self.state.data, ...response.data.data.data],
           count: response.data.count,
           // refreshing: false,
-          // isLoading: false,
+          isLoading: false,
           // isFooterLoading: false,
           imagePath:response.data.data.path,
           // tempData: response.data.history.data,

@@ -30,10 +30,11 @@ export default class CarList extends React.Component {
       refreshing: false,
       isFooterLoading: false,
       isSearched: false,
-      isLoading: false,
+      isLoading: true,
       count: null,
-      search: null,
+      search: "",
       arrIndex: null,
+      tempdata:[]
     };
     this.page = 1;
   }
@@ -44,14 +45,24 @@ export default class CarList extends React.Component {
       access_token: access_token,
     });
 
-    await this._getCarlist(this.page);
+    const { navigation } = this.props;
+    this.focusListener = navigation.addListener("didFocus", async () => {
+      await this._getCarlist(this.page);
+    });
   }
 
   //call api
   _getCarlist = async (page) => {
+    if (this.state.isSearched == true) {
+      this.setState({
+        data: [],
+        isSearched: false,
+      });
+    }
     var self = this;
-    const url = CarlistApi + page;
     // console.log(self.state.search);
+    const url = CarlistApi + page +"&keyword=" + self.state.search ;
+    // console.log(url);
 
     axios
       .get(url, {
@@ -68,6 +79,7 @@ export default class CarList extends React.Component {
           refreshing: false,
           isLoading: false,
           isFooterLoading: false,
+          tempdata: response.data.data.data,
           // tempData: response.data.history.data,
         });
       })
@@ -84,15 +96,15 @@ export default class CarList extends React.Component {
 
   //handelSearch
 
-  _handleOnSearch = async (page, search) => {
+  _handleOnSearch = async (page) => {
+    this.state.data = [];
+    this.state.count = null;
     var self = this;
-    const url = CarlistApi + page;
-    let bodyParam = {
-      keyword: search,
-    };
-    // console.log(self.state.access_token);
+    self.setState({ isSearched: false });
+    const url = CarlistApi + page + "&keyword=" + self.state.search;
+    console.log(url);
     axios
-      .get(url, bodyParam, {
+      .get(url,{
         headers: {
           Accept: "application/json",
           Authorization: "Bearer " + self.state.access_token,
@@ -100,11 +112,15 @@ export default class CarList extends React.Component {
       })
       // console.log(headers)
       .then(function (response) {
-        // console.log(response.data);
-        // self.setState({
-        //   data: [...self.state.data, ...response.data.history.data],
-        //   // searchTravel: response.data.history.data,
-        // });
+        console.log(response.data);
+        self.setState({
+          data: [...self.state.data, ...response.data.data.data],
+          count: response.data.count,
+          refreshing: false,
+          isLoading: false,
+          isFooterLoading: false,
+          // searchTravel: response.data.history.data,
+        });
       })
       .catch(function (err) {
         // alert("Error");
@@ -160,20 +176,21 @@ export default class CarList extends React.Component {
   //RefreshControl
 
   onRefresh = () => {
+    this._getCarlist(this.page);
     this.setState({
       // data: [],
       refreshing: true,
     });
-    this._getCarlist(this.page);
+ 
   };
 
   render() {
-    // console.log(this.props.navigation.getParam("status"));
+    // console.log(this.state.isSearched);
     if (this.state.isLoading) {
       return <Loading />;
     }
 
-    var { data } = this.state;
+    var { isSearched, data ,count } = this.state;
     // var dataList = isSearched ? searchTravel : data;
     var dataList = data;
 
@@ -189,7 +206,7 @@ export default class CarList extends React.Component {
             ></TextInput>
           </View>
           <TouchableOpacity
-            onPress={() => this._handleOnSearch(this.page, this.state.search)}
+            onPress={() => this._handleOnSearch(this.page)}
             style={styles.searchBtn}
           >
             <Image
@@ -207,7 +224,7 @@ export default class CarList extends React.Component {
             fontSize: 16,
           }}
         >
-          Total = {this.state.count}
+          Total = {count}
         </Text>
 
         <FlatList
@@ -242,7 +259,7 @@ export default class CarList extends React.Component {
           contentContainerStyle={{
             flexGrow: 1,
           }}
-          onEndReached={() => this.handleLoadMore()}
+          onEndReached={() => (!isSearched ? this.handleLoadMore() : {})}
         />
       </View>
     );

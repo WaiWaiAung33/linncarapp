@@ -1,5 +1,13 @@
 import React from "react";
-import {View,Text,StyleSheet, FlatList,RefreshControl,ScrollView,AsyncStorage} from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  RefreshControl,
+  ScrollView,
+  AsyncStorage,
+} from "react-native";
 
 import DatePicker from "react-native-datepicker";
 import Moment from "moment";
@@ -15,36 +23,38 @@ import Loading from "@components/Loading";
 const axios = require("axios");
 import { gethistoryapi } from "@api/Url";
 
+export default class History extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      access_token: null,
+      dirverid: null,
+      data: [],
+      refreshing: false,
+      isFooterLoading: false,
+      isLoading: true,
+      arrIndex: null,
+      photo: null,
+      imagePath: null,
+    };
+    // this.page = 1;
+  }
 
-export default class History extends React.Component{
-    constructor(props) {
-        super(props);
-        this.state = {
-          access_token: null,
-          dirverid: null,
-          data: [],
-          refreshing: false,
-          isFooterLoading: false,
-          isLoading: false,
-          arrIndex: null,
-          photo:null,
-          imagePath:null
-        };
-        // this.page = 1;
-      }
+  async componentDidMount() {
+    const access_token = await AsyncStorage.getItem("access_token");
+    const userid = await AsyncStorage.getItem("userid");
+    this.setState({
+      access_token: access_token,
+      dirverid: userid,
+    });
 
-      async componentDidMount() {
-        const access_token = await AsyncStorage.getItem("access_token");
-        const userid = await AsyncStorage.getItem("userid");
-        this.setState({
-          access_token: access_token,
-          dirverid: userid,
-        });
-    
-        await this._gethistory();
-      }
+    const { navigation } = this.props;
+    this.focusListener = navigation.addListener("didFocus", async () => {
+      await this._gethistory();
+    });
+  }
 
-       //call api
+  //call api
   _gethistory = async () => {
     var self = this;
     const url = gethistoryapi + self.state.dirverid;
@@ -61,12 +71,12 @@ export default class History extends React.Component{
         console.log(response.data);
         self.setState({
           // data: [...self.state.data, ...response.data.data.data],
-          data:response.data.data.data,
+          data: response.data.data.data,
           count: response.data.count,
           // refreshing: false,
-          // isLoading: false,
+          isLoading: false,
           // isFooterLoading: false,
-          imagePath:response.data.data.path,
+          imagePath: response.data.data.path,
           // tempData: response.data.history.data,
         });
       })
@@ -107,73 +117,80 @@ export default class History extends React.Component{
   //   });
   //   this._gethistory();
   // };
-    
-    render(){
-        if (this.state.isLoading) {
-            return <Loading />;
-          }
-          var { data } = this.state;
-          // var dataList = isSearched ? searchTravel : data;
-          var dataList = data;
-        return(
-            <View style={styles.container}>
-                <View style={{flexDirection:"row",marginTop:10,marginLeft:10,marginRight:10}}>
-                    <Text style={{flex:1}}>Start Date</Text>
-                    <Text style={{flex:1,paddingLeft:15}}>End Date</Text>
-                </View>
-                <View style={styles.secondContainer}>
-         
-                <DatePicker
-                // date={this.state.changestartDate}
-                mode="date"
-                format="DD-MM-YYYY"
-                // maxDate={Moment().endOf("day").toDate()}
-                confirmBtnText="Confirm"
-                cancelBtnText="Cancel"
-                iconSource={require("@images/calendar.png")}
-                style={Style.datePickerContainer}
-                customStyles={{
-                    dateIcon: Style.datePickerDateIcon,
-                    dateInput: Style.datePickerDateInput,
-                    dateText: Style.datePickerDateText,
-                }}
-                // onDateChange={(date) => this._hadleChangeDate(date)}
-                />
-                <DatePicker
-                // date={this.state.changeendDate}
-                mode="date"
-                format="DD-MM-YYYY"
-                maxDate={Moment().endOf("day").toDate()}
-                confirmBtnText="Confirm"
-                cancelBtnText="Cancel"
-                iconSource={require("@images/calendar.png")}
-                style={Style.datePickerContainer}
-                customStyles={{
-                    dateIcon: Style.datePickerDateIcon,
-                    dateInput: Style.datePickerDateInput,
-                    dateText: Style.datePickerDateText,
-                }}
-                // onDateChange={(date) => this._handleChangeEndDate(date)}
-                />
-            </View>
 
-            <ScrollView>
+  render() {
+    if (this.state.isLoading) {
+      return <Loading />;
+    }
+    var { data } = this.state;
+    // var dataList = isSearched ? searchTravel : data;
+    var dataList = data;
+    return (
+      <View style={styles.container}>
+        <View
+          style={{
+            flexDirection: "row",
+            marginTop: 10,
+            marginLeft: 10,
+            marginRight: 10,
+          }}
+        >
+          <Text style={{ flex: 1 }}>Start Date</Text>
+          <Text style={{ flex: 1, paddingLeft: 15 }}>End Date</Text>
+        </View>
+        <View style={styles.secondContainer}>
+          <DatePicker
+            // date={this.state.changestartDate}
+            mode="date"
+            format="DD-MM-YYYY"
+            // maxDate={Moment().endOf("day").toDate()}
+            confirmBtnText="Confirm"
+            cancelBtnText="Cancel"
+            iconSource={require("@images/calendar.png")}
+            style={Style.datePickerContainer}
+            customStyles={{
+              dateIcon: Style.datePickerDateIcon,
+              dateInput: Style.datePickerDateInput,
+              dateText: Style.datePickerDateText,
+            }}
+            // onDateChange={(date) => this._hadleChangeDate(date)}
+          />
+          <DatePicker
+            // date={this.state.changeendDate}
+            mode="date"
+            format="DD-MM-YYYY"
+            maxDate={Moment().endOf("day").toDate()}
+            confirmBtnText="Confirm"
+            cancelBtnText="Cancel"
+            iconSource={require("@images/calendar.png")}
+            style={Style.datePickerContainer}
+            customStyles={{
+              dateIcon: Style.datePickerDateIcon,
+              dateInput: Style.datePickerDateInput,
+              dateText: Style.datePickerDateText,
+            }}
+            // onDateChange={(date) => this._handleChangeEndDate(date)}
+          />
+        </View>
+
+        <ScrollView>
           {this.state.data.map((item, index) => {
             // console.log("ToleGateLsit",item)
             return (
               <View key={index}>
-               <HistoryCard
-                carno={item.car_no}
-                date={item.created_at}
-                OnPress={()=>this.props.navigation.navigate("HistoryDetail")}
+                <HistoryCard
+                  carno={item.car_no}
+                  date={item.created_at}
+                  OnPress={() =>
+                    this.props.navigation.navigate("HistoryDetail",{ datas: item })
+                  }
                 />
               </View>
             );
           })}
-          </ScrollView>
+        </ScrollView>
 
-
-            {/* <FlatList
+        {/* <FlatList
           showsVerticalScrollIndicator={false}
           data={dataList}
           // extraData={this.state}
@@ -203,18 +220,18 @@ export default class History extends React.Component{
           }}
           onEndReached={() => this.handleLoadMore()}
         /> */}
-            </View>
-        )
-    }
+      </View>
+    );
+  }
 }
 const styles = StyleSheet.create({
-    container:{
-        flex:1
-    },
-    secondContainer: {
-        marginTop: 10,
-        justifyContent: "space-between",
-        flexDirection: "row",
-        margin: 10,
-      },
-})
+  container: {
+    flex: 1,
+  },
+  secondContainer: {
+    marginTop: 10,
+    justifyContent: "space-between",
+    flexDirection: "row",
+    margin: 10,
+  },
+});

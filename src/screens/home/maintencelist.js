@@ -1,11 +1,17 @@
 import React from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity,  AsyncStorage,
-  FlatList,
-  ActivityIndicator,
-  RefreshControl, } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  AsyncStorage,
+  ScrollView,
+} from "react-native";
 
 //import components
 import MaintenceListCard from "@components/maintenceListCard";
+import Loading from "@components/Loading";
 
 //import api
 const axios = require("axios");
@@ -19,7 +25,7 @@ export default class RefuelList extends React.Component {
       access_token: null,
       refreshing: false,
       isFooterLoading: false,
-      isLoading: false,
+      isLoading: true,
       arrIndex: null,
       dirverid: null,
     };
@@ -31,16 +37,20 @@ export default class RefuelList extends React.Component {
     const userid = await AsyncStorage.getItem("userid");
     this.setState({
       access_token: access_token,
-       dirverid: userid,
+      dirverid: userid,
+    });
+    const { navigation } = this.props;
+    this.focusListener = navigation.addListener("didFocus", async () => {
+      await this._getMaintence();
     });
 
-    await this._getMaintence();
+    
   }
 
   //call api
   _getMaintence = async () => {
     var self = this;
-    const url = MaintenceListApi+  self.state.dirverid;
+    const url = MaintenceListApi + self.state.dirverid;
     console.log(url);
 
     axios
@@ -53,65 +63,81 @@ export default class RefuelList extends React.Component {
       .then(function (response) {
         // console.log("Maintence List Api",response.data);
         self.setState({
-          data: [...self.state.data, ...response.data.data.data],
+          // data: [...self.state.data, ...response.data.data.data],
+          data: response.data.data.data,
           count: response.data.count,
-          refreshing: false,
+          // refreshing: false,
           isLoading: false,
-          isFooterLoading: false,
+          // isFooterLoading: false,
           // tempData: response.data.history.data,
         });
       })
       .catch(function (err) {
         // alert("Error");
-        self.setState({
-          refreshing: false,
-          isLoading: false,
-          isFooterLoading: false,
-        });
+        // self.setState({
+        //   refreshing: false,
+        //   isLoading: false,
+        //   isFooterLoading: false,
+        // });
         console.log("Maintence Error", err);
       });
   };
 
-    //retrieve More data
-    handleLoadMore = () => {
-      this.setState({ isFooterLoading: true }); // Start Footer loading
-      // this.page = this.page + 1;
-      this._getMaintence(); // method for API call
-    };
-  
-    //renderfooter
-    renderFooter = () => {
-      //it will show indicator at the bottom of the list when data is loading
-      if (this.state.isFooterLoading) {
-        return <ActivityIndicator size="large" style={{ color: "#000" }} />;
-      } else {
-        return null;
-      }
-    };
-  
-    //RefreshControl
-  
-    onRefresh = () => {
-      this.setState({
-        data: [],
-        refreshing: true,
-      });
-      this._getMaintence();
-    };
+  // //retrieve More data
+  // handleLoadMore = () => {
+  //   this.setState({ isFooterLoading: true }); // Start Footer loading
+  //   // this.page = this.page + 1;
+  //   this._getMaintence(); // method for API call
+  // };
+
+  // //renderfooter
+  // renderFooter = () => {
+  //   //it will show indicator at the bottom of the list when data is loading
+  //   if (this.state.isFooterLoading) {
+  //     return <ActivityIndicator size="large" style={{ color: "#000" }} />;
+  //   } else {
+  //     return null;
+  //   }
+  // };
+
+  // //RefreshControl
+
+  // onRefresh = () => {
+  //   this.setState({
+  //     data: [],
+  //     refreshing: true,
+  //   });
+  //   this._getMaintence();
+  // };
 
   render() {
-      // console.log(this.props.navigation.getParam("status"));
-      if (this.state.isLoading) {
-        return <Loading />;
-      }
-  
-      var { data } = this.state;
-      // var dataList = isSearched ? searchTravel : data;
-      var dataList = data;
-
+    console.log(this.state.isLoading);
+    if (this.state.isLoading) {
+      return <Loading />;
+    }
     return (
       <View style={styles.container}>
-        <FlatList
+        <ScrollView>
+          {this.state.data.map((item, index) => {
+            // console.log("ToleGateLsit",item)
+            return (
+              <View key={index}>
+                <MaintenceListCard
+                  carno={item.car_no}
+                  name={item.dname}
+                  price={item.amount}
+                  reason={item.reason}
+                  date={item.created_at}
+                  OnPress={() =>
+                    this.props.navigation.navigate("EditMaintence",{datas:item})
+                  }
+                />
+              </View>
+            );
+          })}
+        </ScrollView>
+
+        {/* <FlatList
           showsVerticalScrollIndicator={false}
           data={dataList}
           // extraData={this.state}
@@ -143,8 +169,8 @@ export default class RefuelList extends React.Component {
             flexGrow: 1,
           }}
           onEndReached={() => this.handleLoadMore()}
-        />
-       
+        /> */}
+
         <View
           style={{
             // flex: 1,

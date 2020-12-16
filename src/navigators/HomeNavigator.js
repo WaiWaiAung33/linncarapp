@@ -20,6 +20,7 @@ import EditMaintence from "@screens/home/editmaintence";
 import History from "@screens/home/history";
 import HistoryDetail from "@screens/home/historydetail";
 import DriverList from "@screens/home/dirverlist";
+import dirverlistdetail from "@screens/home/diverlistdetail";
 
 export default createAppContainer(
     createStackNavigator(
@@ -203,6 +204,20 @@ export default createAppContainer(
                               color: "#ffffff",
                             },
                     headerLeft:()=> <Forward navigation={navigation} routeName="Home" />
+                }),
+            },
+
+            dirverlistdetail:{
+                screen:dirverlistdetail,
+                navigationOptions:({navigation})=>({
+                    headerTitle:"Driver List Detail",
+                    headerStyle: {
+                              backgroundColor: "#3D73D5",
+                            },
+                    headerTitleStyle: {
+                              color: "#ffffff",
+                            },
+                    headerLeft:()=> <Forward navigation={navigation} routeName="DriverList" />
                 }),
             },
             

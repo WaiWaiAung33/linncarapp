@@ -14,6 +14,9 @@ import {
 const axios = require("axios");
 import { TimeoutApi } from "@api/Url";
 
+//import components
+import Loading from "@components/Loading";
+
 export default class Home extends React.Component {
   constructor(props) {
     super(props);
@@ -24,6 +27,7 @@ export default class Home extends React.Component {
       driverid: null,
       status: null,
       carno: null,
+      refreshing: true,
     };
   }
   async componentDidMount() {
@@ -38,12 +42,16 @@ export default class Home extends React.Component {
       access_token: access_token,
       driverid: userid,
     });
+    const { navigation } = this.props;
+    // this.focusListener = navigation.addListener("didFocus", async () => {
+     
+    // });
     await this._getTimeOut();
   }
 
   //call api
 
-  _getTimeOut = async (page) => {
+  _getTimeOut(){
     var self = this;
     const url = TimeoutApi + self.state.driverid;
     // console.log(url);
@@ -59,6 +67,7 @@ export default class Home extends React.Component {
         self.setState({
           carno: response.data.car_no,
           status: response.data.staus,
+          refreshing: false
         });
       })
       .catch(function (err) {
@@ -71,6 +80,10 @@ export default class Home extends React.Component {
     this.props.navigation.navigate("Login");
   }
   render() {
+    // console.log(this.state.refreshing);
+    if (this.state.refreshing) {
+      return <Loading />;
+    }
     // console.log(this.state.status);
     return (
       <View style={styles.container}>
