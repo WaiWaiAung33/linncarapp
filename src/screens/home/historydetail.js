@@ -14,7 +14,7 @@ import ImgUploadBtn from "@components/ImgUploadBtn";
 
 //import api
 const axios = require("axios");
-import { gethistorydetailapi,ImguploadApi } from "@api/Url";
+import { gethistorydetailapi,ImgHistoryuploadApi } from "@api/Url";
 
 export default class HistoryDetail extends React.Component {
   constructor(props) {
@@ -52,7 +52,7 @@ export default class HistoryDetail extends React.Component {
   _gethistorydeetail = async () => {
     var self = this;
     const url = gethistorydetailapi + self.props.navigation.getParam("datas").id;
-    console.log(url);
+    // console.log(url);
 
     axios
       .get(url, {
@@ -62,7 +62,7 @@ export default class HistoryDetail extends React.Component {
         },
       })
       .then(function (response) {
-        console.log(response.data);
+        // console.log(response.data);
         self.setState({
             name:response.data.dname,
             carno:response.data.car_no,
@@ -78,12 +78,12 @@ export default class HistoryDetail extends React.Component {
         })
       })
       .catch(function (err) {
-        console.log("History Error", err);
+        // console.log("History Error", err);
       });
   };
 
   render() {
-    // console.log("Param",this.props.navigation.getParam("datas").id);
+    // console.log(ImgHistoryuploadApi + this.state.endkilophoto);
     return (
       <View style={styles.container}>
         <ScrollView>
@@ -217,7 +217,7 @@ export default class HistoryDetail extends React.Component {
             </View>
             <Image
                 source={{
-                  uri: ImguploadApi + this.state.startkilophoto,
+                  uri: ImgHistoryuploadApi + this.state.startkilophoto,
                 }}
                 style={{ width: 100, height: 100 }}
               />
@@ -229,7 +229,7 @@ export default class HistoryDetail extends React.Component {
             </View>
             <Image
                 source={{
-                  uri: ImguploadApi + this.state.endkilophoto,
+                  uri: ImgHistoryuploadApi + this.state.endkilophoto,
                 }}
                 style={{ width: 100, height: 100 }}
               />

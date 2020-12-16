@@ -9,7 +9,7 @@ import SuccessModal from "@components/SuccessModal";
 
 //import api
 const axios = require("axios");
-import { CarlistApi, editmaintenceapi,ImguploadApi } from "@api/Url";
+import { CarlistApi, editmaintenceapi,ImgMaintenanceuploadApi } from "@api/Url";
 import FormData from "form-data";
 
 export default class EditMaintence extends React.Component{
@@ -35,7 +35,7 @@ export default class EditMaintence extends React.Component{
     const dirvername = await AsyncStorage.getItem("name");
     const dirver = await AsyncStorage.getItem("userid");
     const data = this.props.navigation.getParam("datas");
-    // console.log(data.amount);
+    // console.log(data.vPhoto);
     this.setState({
       access_token: access_token,
       dirvername: dirvername,
@@ -45,7 +45,7 @@ export default class EditMaintence extends React.Component{
       dirvername:data.dname,
       amount:data.amount,
       reason:data.reason,
-      imagePath: ImguploadApi + data.vPhoto
+      imagePath: ImgMaintenanceuploadApi + data.vPhoto
     });
     await this._getCarlist(this.page);
   }
@@ -143,6 +143,7 @@ export default class EditMaintence extends React.Component{
   }
 
     render(){
+      console.log(this.state.imagePath);
         return(
             <View style={styles.container}>
 
@@ -212,11 +213,12 @@ export default class EditMaintence extends React.Component{
                 <View style={styles.textContainer}>
                     <Text style={styles.labelStyle}>Voucher Photo</Text>
                 </View>
-              
+                <View style={{flex:1}}>
                 <ImgUploadBtn
-                imagePath={this.state.imagePath}
-                onChooseImage={this._handleOnChooseImage.bind(this)}
+                 imagePath={this.state.imagePath}
+                 onChooseImage={this._handleOnChooseImage.bind(this)}
                />
+               </View>
             </View>
 
             <View style={styles.formContainer}>

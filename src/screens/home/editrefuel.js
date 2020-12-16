@@ -108,7 +108,7 @@ export default class EditRefuel extends React.Component {
       const fileExtension = uriPart[uriPart.length - 1];
       const fileName = imagePath.substr(imagePath.lastIndexOf("/") + 1);
 
-      formData.append("startKilo_photo", {
+      formData.append("photo", {
         uri: imagePath,
         name: fileName,
         type: `image/${fileExtension}`,
