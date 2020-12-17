@@ -34,7 +34,8 @@ export default class CarList extends React.Component {
       count: null,
       search: "",
       arrIndex: null,
-      tempdata:[]
+      tempdata:[],
+    
     };
     this.page = 1;
   }
@@ -185,7 +186,7 @@ export default class CarList extends React.Component {
   };
 
   render() {
-    // console.log(this.state.isSearched);
+    // console.log("Car List",this.props.navigation.getParam("car_id"));
     if (this.state.isLoading) {
       return <Loading />;
     }

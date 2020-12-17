@@ -14,7 +14,8 @@ export default class CarUse extends React.Component{
             name:null,
             phone:null,
             status:null,
-            reason:null
+            reason:null,
+            load:true
         }
       
     }
@@ -69,10 +70,10 @@ export default class CarUse extends React.Component{
                        <Text style={styles.text}>Reason</Text>
                    </View>
                    <View style={{marginLeft:15}}>
-                       <Text style={styles.text}>{this.state.name}</Text>
-                       <Text style={styles.text}>{this.state.phone}</Text>
+                       <Text style={styles.text}>{this.state.name ? this.state.name : "-"}</Text>
+                       <Text style={styles.text}>{this.state.phone ? this.state.phone : "-"}</Text>
                        <Text style={styles.text}>{this.state.status == 1 ? "Using" : "-"}</Text>
-                       <Text style={styles.text}>{this.state.reason}</Text>
+                       <Text style={styles.text}>{this.state.reason ? this.state.reason : "-"}</Text>
                    </View>
                </View>
             </View>

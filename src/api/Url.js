@@ -49,4 +49,9 @@ export const ImgMaintenanceuploadApi =
 
 //img history api
 export const ImgHistoryuploadApi =
-  "http://128.199.79.79/cardb/public/uploads/report/";
+  "http://128.199.79.79/cardb/public/uploads/reports/";
+
+//time out api
+
+export const timeoutApi = BaseUrl +"endreportcreate/";
+

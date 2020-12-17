@@ -5,6 +5,8 @@ import {View,Text,ScrollView,StyleSheet,TextInput,TouchableOpacity,AsyncStorage}
 import DropDown from "@components/DropDown";
 import ImgUploadBtn from "@components/ImgUploadBtn";
 import SuccessModal from "@components/SuccessModal";
+import ErrorText from "@components/ErrorText";
+import LoadingModal from "@components/LoadingModal";
 
 //import api
 const axios = require("axios");
@@ -24,6 +26,10 @@ export default class CreateMaintence extends React.Component{
        imagePath: null,
       dirverid: null,
       isOpenSuccessModel: false,
+      ISERRORREASON: false,
+      ISERRORPRICE: false,
+      ISERRORIMAGE: false,
+      modalVisible: false,
     };
     this.page = 0;
   }
@@ -36,6 +42,7 @@ export default class CreateMaintence extends React.Component{
       access_token: access_token,
       dirvername: dirvername,
       dirverid: dirver,
+      carno:{value:this.props.navigation.getParam("car_id"),label:this.props.navigation.getParam("carno")}
     });
 
     await this._getCarlist(this.page);
@@ -44,7 +51,26 @@ export default class CreateMaintence extends React.Component{
 
   //create car report
   _handleOnSave = async () => {
+    let isError = false;
+
+    if (this.state.amount == null) {
+      // alert("Helo");
+      this.setState({ ISERRORPRICE: true });
+      isError = true;
+    }
+    if (this.state.reason == null) {
+      // alert("Helo");
+      this.setState({ ISERRORREASON: true });
+      isError = true;
+    }
+    if (this.state.imagePath == null) {
+      // alert("Helo");
+      this.setState({ ISERRORIMAGE: true });
+      isError = true;
+    }
+    if (!isError) {
     const self = this;
+    self.setState({ modalVisible: true });
     const headers = {
       Accept: "application/json",
       Authorization: "Bearer " + self.state.access_token,
@@ -76,12 +102,13 @@ export default class CreateMaintence extends React.Component{
       })
       .then(function (response) {
         console.log(response.data);
-        self.setState({ isOpenSuccessModel: true });
+        self.setState({ isOpenSuccessModel: true ,modalVisible:false});
       })
       .catch(function (err) {
         console.log("Create Maintenance Error",err);
-        self.setState({ isOpenSuccessModel: false });
+        self.setState({ isOpenSuccessModel: false,modalVisible:false });
       });
+    }
   };
 
   //call api
@@ -122,7 +149,7 @@ export default class CreateMaintence extends React.Component{
 
   //image
   _handleOnChooseImage(image) {
-    this.setState({ imagePath: image.uri });
+    this.setState({ imagePath: image.uri,ISERRORIMAGE:false });
   }
 
   //on close
@@ -168,9 +195,7 @@ export default class CreateMaintence extends React.Component{
                
                 </View>
             </View>
-
-           
-
+          
             <View style={styles.formContainer}>
                 <View style={styles.textContainer}>
                     <Text style={styles.labelStyle}>Amount</Text>
@@ -180,8 +205,12 @@ export default class CreateMaintence extends React.Component{
                     value={this.state.amount}
                     // keyboardType="number-pad"
                     style={styles.textInputStyle}
-                    onChangeText={(value)=>this.setState({amount:value})}
+                    onChangeText={(value)=>this.setState({amount:value,ISERRORPRICE:false})}
                     ></TextInput>
+                      <ErrorText
+                  errMessage="please enter price"
+                  isShow={this.state.ISERRORPRICE}
+             />
                 </View>
             </View>
 
@@ -194,8 +223,12 @@ export default class CreateMaintence extends React.Component{
                     value={this.state.reason}
                     // keyboardType="number-pad"
                     style={styles.textAreaStyle}
-                    onChangeText={(value)=>this.setState({reason:value})}
+                    onChangeText={(value)=>this.setState({reason:value,ISERRORREASON:false})}
                     ></TextInput>
+                      <ErrorText
+                  errMessage="please enter reason"
+                  isShow={this.state.ISERRORREASON}
+             />
                 </View>
             </View>
 
@@ -208,6 +241,10 @@ export default class CreateMaintence extends React.Component{
                   imagePath={this.state.imagePath}
                   onChooseImage={this._handleOnChooseImage.bind(this)}
                 />
+                  <ErrorText
+                  errMessage="please choose photo"
+                  isShow={this.state.ISERRORIMAGE}
+             />
               </View>
             </View>
 
@@ -222,6 +259,8 @@ export default class CreateMaintence extends React.Component{
                 </TouchableOpacity>
               </View>
             </View>
+
+            <LoadingModal isOpenModal={this.state.modalVisible} />
 
             <SuccessModal
             isOpen={this.state.isOpenSuccessModel}

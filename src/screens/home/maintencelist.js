@@ -28,6 +28,8 @@ export default class RefuelList extends React.Component {
       isLoading: true,
       arrIndex: null,
       dirverid: null,
+      car_id:null,
+      carno:null
     };
     // this.page = 1;
   }
@@ -38,6 +40,8 @@ export default class RefuelList extends React.Component {
     this.setState({
       access_token: access_token,
       dirverid: userid,
+      car_id:this.props.navigation.getParam("car_id"),
+      carno:this.props.navigation.getParam("carno"),
     });
     const { navigation } = this.props;
     this.focusListener = navigation.addListener("didFocus", async () => {
@@ -180,7 +184,9 @@ export default class RefuelList extends React.Component {
           }}
         >
           <TouchableOpacity
-            onPress={() => this.props.navigation.navigate("CreateMaintence")}
+            onPress={() => this.props.navigation.navigate("CreateMaintence",{
+              car_id:this.state.car_id,carno:this.state.carno
+            })}
           >
             <Image source={require("@images/addblue.png")} />
           </TouchableOpacity>

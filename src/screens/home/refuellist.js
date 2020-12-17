@@ -32,7 +32,9 @@ export default class RefuelList extends React.Component {
       isLoading: true,
       arrIndex: null,
       photo:null,
-      imagePath:null
+      imagePath:null,
+      car_id:null,
+      carno:null
     };
     // this.page = 1;
   }
@@ -43,6 +45,8 @@ export default class RefuelList extends React.Component {
     this.setState({
       access_token: access_token,
       dirverid: userid,
+      car_id:this.props.navigation.getParam("car_id"),
+      carno:this.props.navigation.getParam("carno"),
     });
 
     const { navigation } = this.props;
@@ -114,6 +118,7 @@ export default class RefuelList extends React.Component {
   // };
 
   render() {
+    // console.log("Refuel List",this.props.navigation.getParam("car_id"));
     if (this.state.isLoading) {
       return <Loading />;
     }
@@ -184,7 +189,9 @@ export default class RefuelList extends React.Component {
           }}
         >
           <TouchableOpacity
-            onPress={() => this.props.navigation.navigate("CreateRefuel")}
+            onPress={() => this.props.navigation.navigate("CreateRefuel",{
+              car_id:this.state.car_id,carno:this.state.carno
+            })}
           >
             <Image source={require("@images/addblue.png")} />
           </TouchableOpacity>

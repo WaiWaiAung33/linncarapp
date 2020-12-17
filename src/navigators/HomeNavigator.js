@@ -21,6 +21,7 @@ import History from "@screens/home/history";
 import HistoryDetail from "@screens/home/historydetail";
 import DriverList from "@screens/home/dirverlist";
 import dirverlistdetail from "@screens/home/diverlistdetail";
+import Timeout from "@screens/home/timeout";
 
 export default createAppContainer(
     createStackNavigator(
@@ -218,6 +219,21 @@ export default createAppContainer(
                               color: "#ffffff",
                             },
                     headerLeft:()=> <Forward navigation={navigation} routeName="DriverList" />
+                }),
+            },
+
+            
+            Timeout:{
+                screen:Timeout,
+                navigationOptions:({navigation})=>({
+                    headerTitle:"Time Out",
+                    headerStyle: {
+                              backgroundColor: "#3D73D5",
+                            },
+                    headerTitleStyle: {
+                              color: "#ffffff",
+                            },
+                    headerLeft:()=> <Forward navigation={navigation} routeName="Home" />
                 }),
             },
             

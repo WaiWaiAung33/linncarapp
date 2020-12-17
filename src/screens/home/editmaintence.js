@@ -5,6 +5,7 @@ import {View,Text,StyleSheet,TextInput,TouchableOpacity,AsyncStorage} from "reac
 import DropDown from "@components/DropDown";
 import ImgUploadBtn from "@components/ImgUploadBtn";
 import SuccessModal from "@components/SuccessModal";
+import LoadingModal from "@components/LoadingModal";
 
 
 //import api
@@ -25,7 +26,9 @@ export default class EditMaintence extends React.Component{
       imagePath: null,
       dirverid: null,
       isOpenSuccessModel: false,
-      id:null
+      id:null,
+      modalVisible:false,
+      carstate:null
     };
     this.page = 0;
   }
@@ -41,7 +44,7 @@ export default class EditMaintence extends React.Component{
       dirvername: dirvername,
       dirverid: dirver,
       id:data.id,
-      carno:{value:data.id,label:data.car_no},
+      carstate:data.car_no,
       dirvername:data.dname,
       amount:data.amount,
       reason:data.reason,
@@ -54,6 +57,7 @@ export default class EditMaintence extends React.Component{
   //create car report
   _handleOnSave = async () => {
     const self = this;
+    self.setState({modalVisible:true})
     const headers = {
       Accept: "application/json",
       Authorization: "Bearer " + self.state.access_token,
@@ -76,7 +80,7 @@ export default class EditMaintence extends React.Component{
         type: `image/${fileExtension}`,
       });
     }
-    console.log(formData);
+    // console.log(formData);
     const url = editmaintenceapi + "/" + self.state.id ;
     // console.log(url);
     axios
@@ -85,11 +89,11 @@ export default class EditMaintence extends React.Component{
       })
       .then(function (response) {
         // console.log(response.data);
-        self.setState({ isOpenSuccessModel: true });
+        self.setState({ isOpenSuccessModel: true ,modalVisible:false});
       })
       .catch(function (err) {
         console.log("Create Maintenance Error",err);
-        self.setState({ isOpenSuccessModel: false });
+        self.setState({ isOpenSuccessModel: false  ,modalVisible:false });
       });
   };
 
@@ -97,6 +101,9 @@ export default class EditMaintence extends React.Component{
   _getCarlist = async (page) => {
     var self = this;
     const url = CarlistApi + page;
+   
+    const car = self.state.carstate;
+    // console.log("car",car);
     // console.log(self.state.search);
     axios
       .get(url, {
@@ -110,6 +117,15 @@ export default class EditMaintence extends React.Component{
         let carno = response.data.car_list;
         let arr = [];
         carno.map((data, index) => {
+          if(car == data.car_no){
+            // console.log("id",data.id);
+            self.setState({
+              carno: {
+                value: data.id.toString(),
+                label: data.car_no,
+              },
+            })
+          }
           var obj = { value: data.id.toString(), label: data.car_no };
           arr.push(obj);
         });
@@ -143,7 +159,7 @@ export default class EditMaintence extends React.Component{
   }
 
     render(){
-      console.log(this.state.imagePath);
+      // console.log(this.state.carno.value);
         return(
             <View style={styles.container}>
 
@@ -235,7 +251,7 @@ export default class EditMaintence extends React.Component{
                 </TouchableOpacity>
               </View>
             </View>
-
+            <LoadingModal isOpenModal={this.state.modalVisible} />
             <SuccessModal
             isOpen={this.state.isOpenSuccessModel}
             text="Successfully maintenance updated"

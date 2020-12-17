@@ -12,6 +12,7 @@ import {
 import DropDown from "@components/DropDown";
 import ImgUploadBtn from "@components/ImgUploadBtn";
 import SuccessModal from "@components/SuccessModal";
+import LoadingModal from "@components/LoadingModal";
 
 //import api
 const axios = require("axios");
@@ -31,6 +32,7 @@ export default class EditRefuel extends React.Component {
       imagePath: null,
       dirverid: null,
       isOpenSuccessModel: false,
+      modalVisible: false,
     };
     this.page = 0;
   }
@@ -92,6 +94,7 @@ export default class EditRefuel extends React.Component {
   //create car report
   _handelBtn = async () => {
     const self = this;
+    self.setState({ modalVisible: true });
     const headers = {
       Accept: "application/json",
       Authorization: "Bearer " + self.state.access_token,
@@ -121,10 +124,10 @@ export default class EditRefuel extends React.Component {
         headers,
       })
       .then(function (response) {
-        self.setState({ isOpenSuccessModel: true });
+        self.setState({ isOpenSuccessModel: true,modalVisible:false });
       })
       .catch(function (err) {
-        self.setState({ isOpenSuccessModel: false });
+        self.setState({ isOpenSuccessModel: false,modalVisible:false });
       });
   };
 
@@ -236,6 +239,7 @@ export default class EditRefuel extends React.Component {
             </TouchableOpacity>
           </View>
         </View>
+        <LoadingModal isOpenModal={this.state.modalVisible} />
         <SuccessModal
           isOpen={this.state.isOpenSuccessModel}
           text="Successfully refuel updated"
