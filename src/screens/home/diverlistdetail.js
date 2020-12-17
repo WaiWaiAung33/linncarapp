@@ -35,8 +35,8 @@ export default class DireverListDetail extends React.Component {
         <View style={{ justifyContent: "center", alignItems: "center" }}>
           <View style={styles.firstCircle}>
             <Image
-              source={require("@images/car.png")}
-              style={{ width: 80, height: 80 }}
+              source={require("@images/driver.png")}
+              style={{ width: 150, height: 150 }}
             />
           </View>
           <Text style={{ paddingTop: 10, fontSize: 16 }}>{data.dname}</Text>
@@ -44,7 +44,10 @@ export default class DireverListDetail extends React.Component {
         <ScrollView>
           <View style={styles.secondContainer}>
             <View style={styles.circle}>
-              <Image source={require("@images/car.png")} style={styles.img} />
+              <Image
+                source={require("@images/phone2.png")}
+                style={styles.img}
+              />
             </View>
             <View>
               <TouchableOpacity
@@ -62,7 +65,22 @@ export default class DireverListDetail extends React.Component {
 
           <View style={styles.secondContainer}>
             <View style={styles.circle}>
-              <Image source={require("@images/car.png")} style={styles.img} />
+              <Image source={require("@images/pin.png")} style={styles.img} />
+            </View>
+            <View>
+              <Text style={{ paddingLeft: 10, paddingTop: 10 }}>
+                {data.address}
+              </Text>
+
+              <Text style={{ paddingTop: 15, paddingLeft: 10, color: "gray" }}>
+                Current Address
+              </Text>
+            </View>
+          </View>
+
+          <View style={styles.secondContainer}>
+            <View style={styles.circle}>
+              <Image source={require("@images/cake.png")} style={styles.img} />
             </View>
             <View>
               <Text style={{ paddingLeft: 10, paddingTop: 10 }}>
@@ -76,7 +94,10 @@ export default class DireverListDetail extends React.Component {
 
           <View style={styles.secondContainer}>
             <View style={styles.circle}>
-              <Image source={require("@images/car.png")} style={styles.img} />
+              <Image
+                source={require("@images/nrc.png")}
+                style={{ width: 70, height: 70 }}
+              />
             </View>
             <View>
               <Text style={{ paddingLeft: 10, paddingTop: 10 }}>
@@ -90,7 +111,10 @@ export default class DireverListDetail extends React.Component {
 
           <View style={styles.secondContainer}>
             <View style={styles.circle}>
-              <Image source={require("@images/car.png")} style={styles.img} />
+              <Image
+                source={require("@images/calendar1.png")}
+                style={{ width: 25, height: 25 }}
+              />
             </View>
             <View>
               <Text style={{ paddingLeft: 10, paddingTop: 10 }}>

@@ -32,7 +32,7 @@ export const ImguploadApi = "http://128.199.79.79/cardb/public/uploads/fuel/";
 export const MaintenceListApi = BaseUrl + "getallMaintenance?driverId=";
 
 //get history api
-export const gethistoryapi = BaseUrl + "getAllHistory?driverId=";
+export const gethistoryapi = BaseUrl + "getAllHistory?page=";
 export const gethistorydetailapi = BaseUrl + "report?id=";
 
 //get dirver list api

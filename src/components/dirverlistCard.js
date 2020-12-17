@@ -24,7 +24,7 @@ export default class DriverListCard extends React.Component {
         <TouchableOpacity onPress={() => this._OnPress()}>
           <View style={styles.secondContainer}>
             <View style={styles.circle}>
-              <Image source={require("@images/car.png")} />
+              <Image source={require("@images/driver.png")} style={{width:100,height:100}}/>
             </View>
             <View style={{ justifyContent: "center", marginLeft: 10 }}>
               <Text style={styles.text}>{this.props.name}</Text>

@@ -31,7 +31,8 @@ export default class HistoryDetail extends React.Component {
       startkilo:null,
       endkilo:null,
       startkilophoto:null,
-      endkilophoto:null
+      endkilophoto:null,
+      drivingkilo:null
 
     };
     // this.page = 1;
@@ -63,6 +64,8 @@ export default class HistoryDetail extends React.Component {
       })
       .then(function (response) {
         // console.log(response.data);
+        const total = response.data.end_kilo - response.data.start_kilo;
+        console.log(total);
         self.setState({
             name:response.data.dname,
             carno:response.data.car_no,
@@ -73,7 +76,8 @@ export default class HistoryDetail extends React.Component {
             endkilo:response.data.end_kilo,
             reason:response.data.reason,
             startkilophoto:response.data.startKilo_photo,
-            endkilophoto:response.data.endKilo_photo
+            endkilophoto:response.data.endKilo_photo,
+            drivingkilo:total.toString()
 
         })
       })
@@ -205,6 +209,8 @@ export default class HistoryDetail extends React.Component {
             </View>
             <View style={styles.textInputContainer}>
               <TextInput
+              editable={false}
+              value={this.state.drivingkilo}
                 // keyboardType="number-pad"
                 style={styles.textInputStyle}
               ></TextInput>
@@ -215,24 +221,28 @@ export default class HistoryDetail extends React.Component {
             <View style={styles.textContainer}>
               <Text style={styles.labelStyle}>Start Kilo Photo</Text>
             </View>
+            <View style={styles.textInputContainer}>
             <Image
                 source={{
                   uri: ImgHistoryuploadApi + this.state.startkilophoto,
                 }}
-                style={{ width: 100, height: 100 }}
+                style={{ width: "100%", height: 100 }}
               />
+              </View>
           </View>
 
           <View style={styles.formContainer}>
             <View style={styles.textContainer}>
               <Text style={styles.labelStyle}>End Kilo Photo</Text>
             </View>
+            <View style={styles.textInputContainer}>
             <Image
                 source={{
                   uri: ImgHistoryuploadApi + this.state.endkilophoto,
                 }}
-                style={{ width: 100, height: 100 }}
+                style={{ width: "100%", height: 100 }}
               />
+              </View>
           </View>
         </ScrollView>
       </View>

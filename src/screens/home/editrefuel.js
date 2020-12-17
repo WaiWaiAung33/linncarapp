@@ -192,7 +192,7 @@ export default class EditRefuel extends React.Component {
           <View style={styles.textInputContainer}>
             <TextInput
             value={this.state.Kilo}
-              // keyboardType="number-pad"
+              keyboardType="number-pad"
               style={styles.textInputStyle}
               onChangeText={(value)=>this.setState({Kilo:value})}
             ></TextInput>

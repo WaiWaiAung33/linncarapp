@@ -36,8 +36,12 @@ export default class History extends React.Component {
       arrIndex: null,
       photo: null,
       imagePath: null,
+      start_time: "",
+      end_time: "",
+      start_date: "",
+      end_date: "",
     };
-    // this.page = 1;
+    this.page = 1;
   }
 
   async componentDidMount() {
@@ -47,18 +51,31 @@ export default class History extends React.Component {
       access_token: access_token,
       dirverid: userid,
     });
+    // console.log("Start Date",this.state.start_date);
 
     const { navigation } = this.props;
     this.focusListener = navigation.addListener("didFocus", async () => {
-      await this._gethistory();
+      await this._gethistory(this.page);
+      this.setState({
+        start_date: this.state.start_time,
+        end_date: this.state.end_time,
+      });
     });
   }
 
   //call api
-  _gethistory = async () => {
+  _gethistory = async (page) => {
     var self = this;
-    const url = gethistoryapi + self.state.dirverid;
-    // console.log(self.state.search);
+    // console.log("Sart time",self.state.start_date);
+    const url =
+      gethistoryapi + page + 
+      "&start_date=" +
+      self.state.start_time +
+      "&end_date=" +
+      self.state.end_time +
+      "&driverId=" +
+      self.state.dirverid;
+    console.log(url);
 
     axios
       .get(url, {
@@ -68,7 +85,7 @@ export default class History extends React.Component {
         },
       })
       .then(function (response) {
-        console.log(response.data);
+        // console.log(response.data);
         self.setState({
           // data: [...self.state.data, ...response.data.data.data],
           data: response.data.data.data,
@@ -119,6 +136,7 @@ export default class History extends React.Component {
   // };
 
   render() {
+    console.log(this.state.start_time);
     if (this.state.isLoading) {
       return <Loading />;
     }
@@ -140,7 +158,7 @@ export default class History extends React.Component {
         </View>
         <View style={styles.secondContainer}>
           <DatePicker
-            // date={this.state.changestartDate}
+            date={this.state.start_time}
             mode="date"
             format="DD-MM-YYYY"
             // maxDate={Moment().endOf("day").toDate()}
@@ -153,10 +171,10 @@ export default class History extends React.Component {
               dateInput: Style.datePickerDateInput,
               dateText: Style.datePickerDateText,
             }}
-            // onDateChange={(date) => this._hadleChangeDate(date)}
+            onDateChange={(date) => this.setState({ start_time: date })}
           />
           <DatePicker
-            // date={this.state.changeendDate}
+            date={this.state.end_time}
             mode="date"
             format="DD-MM-YYYY"
             maxDate={Moment().endOf("day").toDate()}
@@ -169,7 +187,7 @@ export default class History extends React.Component {
               dateInput: Style.datePickerDateInput,
               dateText: Style.datePickerDateText,
             }}
-            // onDateChange={(date) => this._handleChangeEndDate(date)}
+            onDateChange={(date) => this.setState({ end_time: date })}
           />
         </View>
 
@@ -182,7 +200,9 @@ export default class History extends React.Component {
                   carno={item.car_no}
                   date={item.created_at}
                   OnPress={() =>
-                    this.props.navigation.navigate("HistoryDetail",{ datas: item })
+                    this.props.navigation.navigate("HistoryDetail", {
+                      datas: item,
+                    })
                   }
                 />
               </View>
