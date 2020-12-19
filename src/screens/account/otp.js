@@ -103,19 +103,18 @@ export default class OTPCode extends React.Component {
     axios
       .post(OTPApi, appuser)
       .then(function (response) {
-        console.log("OTP",response.data);
+        // console.log("OTP",response.data);
         if (response.data.status == 1) {
           // alert(response.data.user.id.toString());
           if (response.data.status === 1) {
             var userid = response.data.user.driverId.toString();
-            console.log("User Id", userid);
+            // console.log("User Id", userid);
             AsyncStorage.multiSet(
               [
                 ["access_token", response.data.access_token],
                 ["loginID", response.data.user.loginId],
                 ["userid", userid],
-                ["name",response.data.user.name],
-
+                ["name", response.data.user.name],
               ],
               (err) => {
                 if (err) {

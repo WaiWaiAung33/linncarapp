@@ -17,7 +17,7 @@ export const CarCreateApi = BaseUrl + "createreport";
 export const CarUseApi = BaseUrl + "getUsingCar?id=";
 
 //refuel list
-export const GetRefuelApi = BaseUrl + "getAllfuel?driverId=";
+export const GetRefuelApi = BaseUrl + "getAllfuel?page=";
 
 //refuel create
 export const CreateRefuelApi = BaseUrl + "createFuel";
@@ -29,7 +29,7 @@ export const EditRefuelApi = BaseUrl + "editFuel/";
 export const ImguploadApi = "http://128.199.79.79/cardb/public/uploads/fuel/";
 
 //maintence list api
-export const MaintenceListApi = BaseUrl + "getallMaintenance?driverId=";
+export const MaintenceListApi = BaseUrl + "getallMaintenance?page=";
 
 //get history api
 export const gethistoryapi = BaseUrl + "getAllHistory?page=";

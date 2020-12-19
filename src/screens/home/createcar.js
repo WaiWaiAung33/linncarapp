@@ -218,7 +218,7 @@ export default class CreateCar extends React.Component {
           type: `image/${fileExtension}`,
         });
       }
-      console.log(formData);
+      // console.log(formData);
       axios
         .post(CarCreateApi, formData, {
           headers,

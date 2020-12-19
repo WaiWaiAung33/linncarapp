@@ -34,8 +34,7 @@ export default class CarList extends React.Component {
       count: null,
       search: "",
       arrIndex: null,
-      tempdata:[],
-    
+      tempdata: [],
     };
     this.page = 1;
   }
@@ -62,7 +61,7 @@ export default class CarList extends React.Component {
     }
     var self = this;
     // console.log(self.state.search);
-    const url = CarlistApi + page +"&keyword=" + self.state.search ;
+    const url = CarlistApi + page + "&keyword=" + self.state.search;
     // console.log(url);
 
     axios
@@ -103,9 +102,9 @@ export default class CarList extends React.Component {
     var self = this;
     self.setState({ isSearched: false });
     const url = CarlistApi + page + "&keyword=" + self.state.search;
-    console.log(url);
+    // console.log(url);
     axios
-      .get(url,{
+      .get(url, {
         headers: {
           Accept: "application/json",
           Authorization: "Bearer " + self.state.access_token,
@@ -113,7 +112,7 @@ export default class CarList extends React.Component {
       })
       // console.log(headers)
       .then(function (response) {
-        console.log(response.data);
+        // console.log(response.data);
         self.setState({
           data: [...self.state.data, ...response.data.data.data],
           count: response.data.count,
@@ -177,12 +176,11 @@ export default class CarList extends React.Component {
   //RefreshControl
 
   onRefresh = () => {
-    this._getCarlist(this.page);
     this.setState({
-      // data: [],
+      data: [],
       refreshing: true,
     });
- 
+    this._getCarlist(this.page);
   };
 
   render() {
@@ -191,7 +189,7 @@ export default class CarList extends React.Component {
       return <Loading />;
     }
 
-    var { isSearched, data ,count } = this.state;
+    var { isSearched, data, count } = this.state;
     // var dataList = isSearched ? searchTravel : data;
     var dataList = data;
 

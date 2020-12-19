@@ -56,7 +56,7 @@ export default class CreateRefuel extends React.Component {
         label: this.props.navigation.getParam("carno"),
       },
     });
-    console.log(this.props.navigation.getParam("car_id"));
+    // console.log(this.props.navigation.getParam("car_id"));
 
     await this._getCarlist(this.page);
   }

@@ -29,7 +29,7 @@ export default class DriverList extends React.Component {
       refreshing: false,
       isFooterLoading: false,
       isSearched: false,
-      isLoading:true,
+      isLoading: true,
       count: null,
       search: "",
       arrIndex: null,
@@ -47,7 +47,6 @@ export default class DriverList extends React.Component {
     this.focusListener = navigation.addListener("didFocus", async () => {
       await this._getDriverList(this.page);
     });
-   
   }
 
   //call api
@@ -60,7 +59,7 @@ export default class DriverList extends React.Component {
       });
     }
     var self = this;
-    const url = driverlistapi + page+"&keyword=" + self.state.search ;
+    const url = driverlistapi + page + "&keyword=" + self.state.search;
     // console.log(url);
 
     axios
@@ -92,14 +91,13 @@ export default class DriverList extends React.Component {
       });
   };
 
-   //call api
-   _handleOnSearch = async (page) => {
-    
+  //call api
+  _handleOnSearch = async (page) => {
     var self = this;
     self.state.data = [];
     self.state.count = null;
     self.setState({ isSearched: false });
-    const url = driverlistapi + page+"&keyword=" + self.state.search ;
+    const url = driverlistapi + page + "&keyword=" + self.state.search;
     // console.log(self.state.search);
 
     axios
@@ -130,7 +128,6 @@ export default class DriverList extends React.Component {
         console.log("Driver List Error", err);
       });
   };
-
 
   //retrieve More data
   handleLoadMore = () => {
@@ -164,7 +161,7 @@ export default class DriverList extends React.Component {
     if (this.state.isLoading) {
       return <Loading />;
     }
-    var { isSearched,data,count } = this.state;
+    var { isSearched, data, count } = this.state;
     // var dataList = isSearched ? data : data;
     var dataList = data;
     return (
@@ -172,16 +169,16 @@ export default class DriverList extends React.Component {
         <View style={styles.searchContainer}>
           <View style={styles.searchTextInput}>
             <TextInput
-            value={this.state.search}
+              value={this.state.search}
               style={styles.textSearch}
               placeholder="Search ..."
-              onChangeText={(value)=>this.setState({search:value})}
+              onChangeText={(value) => this.setState({ search: value })}
             ></TextInput>
           </View>
           <TouchableOpacity
-           style={styles.searchBtn}
-           onPress={() => this._handleOnSearch(this.page)}
-           >
+            style={styles.searchBtn}
+            onPress={() => this._handleOnSearch(this.page)}
+          >
             <Image
               source={require("@images/search.png")}
               style={{ width: 30, height: 30 }}

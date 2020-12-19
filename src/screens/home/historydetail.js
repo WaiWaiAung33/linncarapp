@@ -6,7 +6,7 @@ import {
   StyleSheet,
   TextInput,
   AsyncStorage,
-  Image
+  Image,
 } from "react-native";
 
 //import components
@@ -14,7 +14,7 @@ import ImgUploadBtn from "@components/ImgUploadBtn";
 
 //import api
 const axios = require("axios");
-import { gethistorydetailapi,ImgHistoryuploadApi } from "@api/Url";
+import { gethistorydetailapi, ImgHistoryuploadApi } from "@api/Url";
 
 export default class HistoryDetail extends React.Component {
   constructor(props) {
@@ -22,18 +22,17 @@ export default class HistoryDetail extends React.Component {
     this.state = {
       access_token: null,
       dirverid: null,
-      name:null,
-      carno:null,
-      usagename:null,
-      startplace:null,
-      endplace:null,
-      reason:null,
-      startkilo:null,
-      endkilo:null,
-      startkilophoto:null,
-      endkilophoto:null,
-      drivingkilo:null
-
+      name: null,
+      carno: null,
+      usagename: null,
+      startplace: null,
+      endplace: null,
+      reason: null,
+      startkilo: null,
+      endkilo: null,
+      startkilophoto: null,
+      endkilophoto: null,
+      drivingkilo: null,
     };
     // this.page = 1;
   }
@@ -52,7 +51,8 @@ export default class HistoryDetail extends React.Component {
   //call api
   _gethistorydeetail = async () => {
     var self = this;
-    const url = gethistorydetailapi + self.props.navigation.getParam("datas").id;
+    const url =
+      gethistorydetailapi + self.props.navigation.getParam("datas").id;
     // console.log(url);
 
     axios
@@ -65,21 +65,20 @@ export default class HistoryDetail extends React.Component {
       .then(function (response) {
         // console.log(response.data);
         const total = response.data.end_kilo - response.data.start_kilo;
-        console.log(total);
+        // console.log(total);
         self.setState({
-            name:response.data.dname,
-            carno:response.data.car_no,
-            usagename:response.data.usageName,
-            startplace:response.data.start_place,
-            endplace:response.data.end_place,
-            startkilo:response.data.start_kilo,
-            endkilo:response.data.end_kilo,
-            reason:response.data.reason,
-            startkilophoto:response.data.startKilo_photo,
-            endkilophoto:response.data.endKilo_photo,
-            drivingkilo:total.toString()
-
-        })
+          name: response.data.dname,
+          carno: response.data.car_no,
+          usagename: response.data.usageName,
+          startplace: response.data.start_place,
+          endplace: response.data.end_place,
+          startkilo: response.data.start_kilo,
+          endkilo: response.data.end_kilo,
+          reason: response.data.reason,
+          startkilophoto: response.data.startKilo_photo,
+          endkilophoto: response.data.endKilo_photo,
+          drivingkilo: total.toString(),
+        });
       })
       .catch(function (err) {
         // console.log("History Error", err);
@@ -97,8 +96,8 @@ export default class HistoryDetail extends React.Component {
             </View>
             <View style={styles.textInputContainer}>
               <TextInput
-              value={this.state.name}
-              editable={false}
+                value={this.state.name}
+                editable={false}
                 // keyboardType="number-pad"
                 style={styles.textInputStyle}
               ></TextInput>
@@ -111,8 +110,8 @@ export default class HistoryDetail extends React.Component {
             </View>
             <View style={styles.textInputContainer}>
               <TextInput
-              value={this.state.carno}
-              editable={false}
+                value={this.state.carno}
+                editable={false}
                 // keyboardType="number-pad"
                 style={styles.textInputStyle}
               ></TextInput>
@@ -125,8 +124,8 @@ export default class HistoryDetail extends React.Component {
             </View>
             <View style={styles.textInputContainer}>
               <TextInput
-               value={this.state.usagename}
-               editable={false}
+                value={this.state.usagename}
+                editable={false}
                 // keyboardType="number-pad"
                 style={styles.textInputStyle}
               ></TextInput>
@@ -139,8 +138,8 @@ export default class HistoryDetail extends React.Component {
             </View>
             <View style={styles.textInputContainer}>
               <TextInput
-               value={this.state.startplace}
-               editable={false}
+                value={this.state.startplace}
+                editable={false}
                 // keyboardType="number-pad"
                 style={styles.textInputStyle}
               ></TextInput>
@@ -153,8 +152,8 @@ export default class HistoryDetail extends React.Component {
             </View>
             <View style={styles.textInputContainer}>
               <TextInput
-               value={this.state.endplace}
-               editable={false}
+                value={this.state.endplace}
+                editable={false}
                 // keyboardType="number-pad"
                 style={styles.textInputStyle}
               ></TextInput>
@@ -167,8 +166,8 @@ export default class HistoryDetail extends React.Component {
             </View>
             <View style={styles.textInputContainer}>
               <TextInput
-               value={this.state.reason}
-               editable={false}
+                value={this.state.reason}
+                editable={false}
                 // keyboardType="number-pad"
                 style={styles.textAreaStyle}
               ></TextInput>
@@ -181,8 +180,8 @@ export default class HistoryDetail extends React.Component {
             </View>
             <View style={styles.textInputContainer}>
               <TextInput
-               value={this.state.startkilo}
-               editable={false}
+                value={this.state.startkilo}
+                editable={false}
                 // keyboardType="number-pad"
                 style={styles.textInputStyle}
               ></TextInput>
@@ -195,8 +194,8 @@ export default class HistoryDetail extends React.Component {
             </View>
             <View style={styles.textInputContainer}>
               <TextInput
-               value={this.state.endkilo}
-               editable={false}
+                value={this.state.endkilo}
+                editable={false}
                 // keyboardType="number-pad"
                 style={styles.textInputStyle}
               ></TextInput>
@@ -209,8 +208,8 @@ export default class HistoryDetail extends React.Component {
             </View>
             <View style={styles.textInputContainer}>
               <TextInput
-              editable={false}
-              value={this.state.drivingkilo}
+                editable={false}
+                value={this.state.drivingkilo}
                 // keyboardType="number-pad"
                 style={styles.textInputStyle}
               ></TextInput>
@@ -222,13 +221,13 @@ export default class HistoryDetail extends React.Component {
               <Text style={styles.labelStyle}>Start Kilo Photo</Text>
             </View>
             <View style={styles.textInputContainer}>
-            <Image
+              <Image
                 source={{
                   uri: ImgHistoryuploadApi + this.state.startkilophoto,
                 }}
                 style={{ width: "100%", height: 100 }}
               />
-              </View>
+            </View>
           </View>
 
           <View style={styles.formContainer}>
@@ -236,13 +235,13 @@ export default class HistoryDetail extends React.Component {
               <Text style={styles.labelStyle}>End Kilo Photo</Text>
             </View>
             <View style={styles.textInputContainer}>
-            <Image
+              <Image
                 source={{
                   uri: ImgHistoryuploadApi + this.state.endkilophoto,
                 }}
                 style={{ width: "100%", height: 100 }}
               />
-              </View>
+            </View>
           </View>
         </ScrollView>
       </View>

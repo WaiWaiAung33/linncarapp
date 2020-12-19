@@ -7,6 +7,7 @@ import {
   RefreshControl,
   ScrollView,
   AsyncStorage,
+  ActivityIndicator,
 } from "react-native";
 
 import DatePicker from "react-native-datepicker";
@@ -38,8 +39,7 @@ export default class History extends React.Component {
       imagePath: null,
       start_time: "",
       end_time: "",
-      start_date: "",
-      end_date: "",
+      isSearched: false,
     };
     this.page = 1;
   }
@@ -56,26 +56,49 @@ export default class History extends React.Component {
     const { navigation } = this.props;
     this.focusListener = navigation.addListener("didFocus", async () => {
       await this._gethistory(this.page);
-      this.setState({
-        start_date: this.state.start_time,
-        end_date: this.state.end_time,
-      });
+      await this._getNewDate();
+    });
+  }
+
+  async _getNewDate() {
+    var today = new Date();
+    var dd = today.getDate();
+
+    var mm = today.getMonth() + 1;
+    var yyyy = today.getFullYear();
+    if (dd < 10) {
+      dd = "0" + dd;
+    }
+
+    if (mm < 10) {
+      mm = "0" + mm;
+    }
+    today = dd + "-" + mm + "-" + yyyy;
+    this.setState({
+      end_time: today,
     });
   }
 
   //call api
   _gethistory = async (page) => {
+    if (this.state.isSearched == true) {
+      this.setState({
+        data: [],
+        isSearched: false,
+      });
+    }
     var self = this;
     // console.log("Sart time",self.state.start_date);
     const url =
-      gethistoryapi + page + 
+      gethistoryapi +
+      page +
       "&start_date=" +
       self.state.start_time +
       "&end_date=" +
       self.state.end_time +
       "&driverId=" +
       self.state.dirverid;
-    console.log(url);
+    // console.log(url);
 
     axios
       .get(url, {
@@ -87,12 +110,12 @@ export default class History extends React.Component {
       .then(function (response) {
         // console.log(response.data);
         self.setState({
-          // data: [...self.state.data, ...response.data.data.data],
-          data: response.data.data.data,
+          data: [...self.state.data, ...response.data.data.data],
+          // data: response.data.data.data,
           count: response.data.count,
-          // refreshing: false,
+          refreshing: false,
           isLoading: false,
-          // isFooterLoading: false,
+          isFooterLoading: false,
           imagePath: response.data.data.path,
           // tempData: response.data.history.data,
         });
@@ -108,39 +131,110 @@ export default class History extends React.Component {
       });
   };
 
-  // //retrieve More data
-  // handleLoadMore = () => {
-  //   this.setState({ isFooterLoading: true }); // Start Footer loading
-  //   // this.page = this.page + 1;
-  //   this._gethistory(); // method for API call
-  // };
+  _handelStartDate(date) {
+    this.setState({ start_time: date });
+    this._handleDate(this.page, date, this.state.end_time);
+  }
+  _handleEndDate(date) {
+    this.setState({ end_time: date });
+    this._handleDate(this.page, this.state.start_time, date);
+  }
 
-  // //renderfooter
-  // renderFooter = () => {
-  //   //it will show indicator at the bottom of the list when data is loading
-  //   if (this.state.isFooterLoading) {
-  //     return <ActivityIndicator size="large" style={{ color: "#000" }} />;
-  //   } else {
-  //     return null;
-  //   }
-  // };
+  //call api
+  _handleDate = async (page, sdate, edate) => {
+    // alert("Hello")
+    // alert(sdate);
+    this.state.data = [];
+    var self = this;
+    self.setState({ isSearched: false });
+    // console.log("Sart time",sdate);
+    const url =
+      gethistoryapi +
+      page +
+      "&start_date=" +
+      sdate +
+      "&end_date=" +
+      edate +
+      "&driverId=" +
+      self.state.dirverid;
+    // console.log("Handle Search",url);
 
-  // //RefreshControl
+    axios
+      .get(url, {
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer " + self.state.access_token,
+        },
+      })
+      .then(function (response) {
+        // console.log(response.data);
+        self.setState({
+          data: [...self.state.data, ...response.data.data.data],
+          // data: response.data.data.data,
+          count: response.data.count,
+          refreshing: false,
+          isLoading: false,
+          isFooterLoading: false,
+          imagePath: response.data.data.path,
+          // tempData: response.data.history.data,
+        });
+      })
+      .catch(function (err) {
+        // alert("Error");
+        self.setState({
+          refreshing: false,
+          isLoading: false,
+          isFooterLoading: false,
+        });
+        console.log("History Error", err);
+      });
+  };
 
-  // onRefresh = () => {
-  //   this.setState({
-  //     // data: [],
-  //     refreshing: true,
-  //   });
-  //   this._gethistory();
-  // };
+  //retrieve More data
+  handleLoadMore = () => {
+    this.setState({ isFooterLoading: true }); // Start Footer loading
+    this.page = this.page + 1;
+    this._gethistory(this.page); // method for API call
+  };
+
+  //renderfooter
+  renderFooter = () => {
+    //it will show indicator at the bottom of the list when data is loading
+    if (this.state.isFooterLoading) {
+      return <ActivityIndicator size="large" style={{ color: "#000" }} />;
+    } else {
+      return null;
+    }
+  };
+
+  FlatListItemSeparator = () => {
+    return (
+      <View
+        style={{
+          height: 1,
+          width: "100%",
+          // backgroundColor: "#607D8B",
+        }}
+      />
+    );
+  };
+
+  //RefreshControl
+
+  onRefresh = () => {
+    this.setState({
+      data: [],
+      refreshing: true,
+    });
+    this._gethistory(this.page);
+  };
 
   render() {
-    console.log(this.state.start_time);
+    // console.log(this.state.start_time);
     if (this.state.isLoading) {
       return <Loading />;
     }
-    var { data } = this.state;
+    var { isSearched, data } = this.state;
     // var dataList = isSearched ? searchTravel : data;
     var dataList = data;
     return (
@@ -171,7 +265,7 @@ export default class History extends React.Component {
               dateInput: Style.datePickerDateInput,
               dateText: Style.datePickerDateText,
             }}
-            onDateChange={(date) => this.setState({ start_time: date })}
+            onDateChange={(date) => this._handelStartDate(date)}
           />
           <DatePicker
             date={this.state.end_time}
@@ -187,30 +281,11 @@ export default class History extends React.Component {
               dateInput: Style.datePickerDateInput,
               dateText: Style.datePickerDateText,
             }}
-            onDateChange={(date) => this.setState({ end_time: date })}
+            onDateChange={(date) => this._handleEndDate(date)}
           />
         </View>
 
-        <ScrollView>
-          {this.state.data.map((item, index) => {
-            // console.log("ToleGateLsit",item)
-            return (
-              <View key={index}>
-                <HistoryCard
-                  carno={item.car_no}
-                  date={item.created_at}
-                  OnPress={() =>
-                    this.props.navigation.navigate("HistoryDetail", {
-                      datas: item,
-                    })
-                  }
-                />
-              </View>
-            );
-          })}
-        </ScrollView>
-
-        {/* <FlatList
+        <FlatList
           showsVerticalScrollIndicator={false}
           data={dataList}
           // extraData={this.state}
@@ -224,11 +299,15 @@ export default class History extends React.Component {
           renderItem={({ item }) => (
             // console.log(item),
             <View>
-            <HistoryCard
-            carno={item.car_no}
-            date={item.created_at}
-             OnPress={()=>this.props.navigation.navigate("HistoryDetail")}
-            />
+              <HistoryCard
+                carno={item.car_no}
+                date={item.created_at}
+                OnPress={() =>
+                  this.props.navigation.navigate("HistoryDetail", {
+                    datas: item,
+                  })
+                }
+              />
             </View>
           )}
           keyExtractor={(item, index) => index.toString()}
@@ -238,8 +317,8 @@ export default class History extends React.Component {
           contentContainerStyle={{
             flexGrow: 1,
           }}
-          onEndReached={() => this.handleLoadMore()}
-        /> */}
+          // onEndReached={() =>(isSearched == false ? this.handleLoadMore() : {})}
+        />
       </View>
     );
   }

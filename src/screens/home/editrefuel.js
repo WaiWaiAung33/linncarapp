@@ -16,7 +16,7 @@ import LoadingModal from "@components/LoadingModal";
 
 //import api
 const axios = require("axios");
-import { CarlistApi,ImguploadApi,EditRefuelApi } from "@api/Url";
+import { CarlistApi, ImguploadApi, EditRefuelApi } from "@api/Url";
 import FormData from "form-data";
 
 export default class EditRefuel extends React.Component {
@@ -41,20 +41,20 @@ export default class EditRefuel extends React.Component {
     const access_token = await AsyncStorage.getItem("access_token");
     const dirvername = await AsyncStorage.getItem("name");
     const dirver = await AsyncStorage.getItem("userid");
-    console.log(this.props.navigation.getParam("data"));
+    // console.log(this.props.navigation.getParam("data"));
 
     this.setState({
       access_token: access_token,
       dirvername: dirvername,
       dirverid: dirver,
-      dirvername:this.props.navigation.getParam("data").dname,
-      Kilo:this.props.navigation.getParam("data").kilo,
-      price:this.props.navigation.getParam("data").price,
+      dirvername: this.props.navigation.getParam("data").dname,
+      Kilo: this.props.navigation.getParam("data").kilo,
+      price: this.props.navigation.getParam("data").price,
       carno: {
         value: this.props.navigation.getParam("data").car_id,
         label: this.props.navigation.getParam("data").car_no,
       },
-      imagePath: ImguploadApi + this.props.navigation.getParam("data").photo
+      imagePath: ImguploadApi + this.props.navigation.getParam("data").photo,
     });
 
     await this._getCarlist(this.page);
@@ -124,10 +124,10 @@ export default class EditRefuel extends React.Component {
         headers,
       })
       .then(function (response) {
-        self.setState({ isOpenSuccessModel: true,modalVisible:false });
+        self.setState({ isOpenSuccessModel: true, modalVisible: false });
       })
       .catch(function (err) {
-        self.setState({ isOpenSuccessModel: false,modalVisible:false });
+        self.setState({ isOpenSuccessModel: false, modalVisible: false });
       });
   };
 
@@ -141,11 +141,11 @@ export default class EditRefuel extends React.Component {
   _handleOnChooseImage(image) {
     this.setState({ imagePath: image.uri });
   }
-   //on close
-   _handleOnClose() {
+  //on close
+  _handleOnClose() {
     this.setState({
-      isOpenSuccessModel:false
-    })
+      isOpenSuccessModel: false,
+    });
     this.props.navigation.navigate("RefuelList");
   }
 
@@ -176,8 +176,8 @@ export default class EditRefuel extends React.Component {
           </View>
           <View style={styles.textInputContainer}>
             <TextInput
-            value={this.state.dirvername}
-            editable={false}
+              value={this.state.dirvername}
+              editable={false}
               // keyboardType="number-pad"
               style={styles.textInputStyle}
               // onChangeText={()=>this.setState({dirvername:value})}
@@ -191,10 +191,10 @@ export default class EditRefuel extends React.Component {
           </View>
           <View style={styles.textInputContainer}>
             <TextInput
-            value={this.state.Kilo}
+              value={this.state.Kilo}
               keyboardType="number-pad"
               style={styles.textInputStyle}
-              onChangeText={(value)=>this.setState({Kilo:value})}
+              onChangeText={(value) => this.setState({ Kilo: value })}
             ></TextInput>
           </View>
         </View>
@@ -205,10 +205,10 @@ export default class EditRefuel extends React.Component {
           </View>
           <View style={styles.textInputContainer}>
             <TextInput
-            value={this.state.price}
+              value={this.state.price}
               // keyboardType="number-pad"
               style={styles.textInputStyle}
-              onChangeText={(value)=>this.setState({price:value})}
+              onChangeText={(value) => this.setState({ price: value })}
             ></TextInput>
           </View>
         </View>
@@ -217,11 +217,11 @@ export default class EditRefuel extends React.Component {
           <View style={styles.textContainer}>
             <Text style={styles.labelStyle}>Voucher</Text>
           </View>
-          <View style={{flex:1}}>
-          <ImgUploadBtn
-                imagePath={this.state.imagePath}
-                onChooseImage={this._handleOnChooseImage.bind(this)}
-          />
+          <View style={{ flex: 1 }}>
+            <ImgUploadBtn
+              imagePath={this.state.imagePath}
+              onChooseImage={this._handleOnChooseImage.bind(this)}
+            />
           </View>
         </View>
 
@@ -233,7 +233,7 @@ export default class EditRefuel extends React.Component {
                 </TouchableOpacity> */}
             <TouchableOpacity
               style={styles.saveBtn}
-                onPress={() => this._handelBtn()}
+              onPress={() => this._handelBtn()}
             >
               <Text style={{ color: "white" }}>Update</Text>
             </TouchableOpacity>

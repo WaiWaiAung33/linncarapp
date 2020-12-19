@@ -8,8 +8,7 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
-  AsyncStorage
- 
+  AsyncStorage,
 } from "react-native";
 
 const { height, width } = Dimensions.get("window");
@@ -20,16 +19,15 @@ const axios = require("axios");
 import { LoginApi } from "@api/Url";
 
 export default class Login extends React.Component {
-
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state={
+    this.state = {
       access_token: "",
       user_id: "",
       pass: "",
       isOnline: false,
       editable: true,
-    }
+    };
   }
 
   async componentDidMount() {
@@ -62,9 +60,9 @@ export default class Login extends React.Component {
         axios
           .post(LoginApi, appuser)
           .then(function (response) {
-            console.log(response.data);
+            // console.log(response.data);
             if (response.data.error == 0) {
-              console.log("Lgoin",response.data);
+              // console.log("Lgoin",response.data);
               // alert(response.data.message);
 
               self.props.navigation.navigate("OTPCode", {
@@ -88,44 +86,60 @@ export default class Login extends React.Component {
     }
   };
 
-
   render() {
     // alert(this.state.locale);
     return (
-    <View style={{flex:1,backgroundColor:"#CBD1E8"}}>
-      <View style={styles.container}>
-        <StatusBar style="auto" />
-        <View style={{justifyContent:"center",alignItems:"center",marginTop:15}}>
-        <Image source={require("@images/logo.png")} style={{width:70,height:70}}/>
-        </View>
-        <Text style={{paddingTop:20,textAlignVertical:"center",textAlign:"center",
-        color:"white",fontSize:18}}>Linn Car Report</Text>
-        <View style={styles.thirdContainer}>
-          <Text style={styles.headerText}>
-            {/* {" "} */}
-            Car Login
-          </Text>
+      <View style={{ flex: 1, backgroundColor: "#CBD1E8" }}>
+        <View style={styles.container}>
+          <StatusBar style="auto" />
           <View
             style={{
-              flexDirection: "row",
+              justifyContent: "center",
               alignItems: "center",
-              marginTop: 20,
+              marginTop: 15,
             }}
           >
-            <View style={styles.textinputImg}>
-              <Image source={require("@images/phone.png")} />
-            </View>
-
-            <TextInput
-              value={this.state.user_id}
-              style={styles.textInput}
-              placeholder="09 XXX XXX XXX"
-              keyboardType="number-pad"
-              onChangeText={(value) => this.setState({ user_id: value })}
-             
+            <Image
+              source={require("@images/logo.png")}
+              style={{ width: 70, height: 70 }}
             />
           </View>
-          {/* <View
+          <Text
+            style={{
+              paddingTop: 20,
+              textAlignVertical: "center",
+              textAlign: "center",
+              color: "white",
+              fontSize: 18,
+            }}
+          >
+            Linn Car Report
+          </Text>
+          <View style={styles.thirdContainer}>
+            <Text style={styles.headerText}>
+              {/* {" "} */}
+              Car Login
+            </Text>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                marginTop: 20,
+              }}
+            >
+              <View style={styles.textinputImg}>
+                <Image source={require("@images/phone.png")} />
+              </View>
+
+              <TextInput
+                value={this.state.user_id}
+                style={styles.textInput}
+                placeholder="09 XXX XXX XXX"
+                keyboardType="number-pad"
+                onChangeText={(value) => this.setState({ user_id: value })}
+              />
+            </View>
+            {/* <View
             style={{
               flexDirection: "row",
               alignItems: "center",
@@ -144,16 +158,15 @@ export default class Login extends React.Component {
               onChangeText={(value) => this.setState({ pass: value })}
             />
           </View> */}
-          <TouchableOpacity
-         onPress={() => this._handleLogin()}
-        // onPress={()=>this.props.navigation.navigate("#")}
-            style={styles.touchBtn}
-          >
-            <Text style={styles.text}>Login</Text>
-          </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => this._handleLogin()}
+              // onPress={()=>this.props.navigation.navigate("#")}
+              style={styles.touchBtn}
+            >
+              <Text style={styles.text}>Login</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      
-      </View>
       </View>
     );
   }
@@ -161,12 +174,12 @@ export default class Login extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor:"#3D73D5",
-    height:200,
-    borderWidth:1,
-    borderColor:"#3D73D5",
-    borderBottomLeftRadius:25,
-    borderBottomRightRadius:25
+    backgroundColor: "#3D73D5",
+    height: 200,
+    borderWidth: 1,
+    borderColor: "#3D73D5",
+    borderBottomLeftRadius: 25,
+    borderBottomRightRadius: 25,
   },
   secondContainer: {
     height: 200,
@@ -206,7 +219,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     textAlign: "center",
-    fontSize:18
+    fontSize: 18,
   },
   textInput: {
     // margin: 10,
