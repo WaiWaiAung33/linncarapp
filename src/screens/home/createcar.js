@@ -146,7 +146,7 @@ export default class CreateCar extends React.Component {
         },
       })
       .then(function (response) {
-        console.log(response.data);
+        // console.log(response.data);
         let carno = response.data.car_list;
         let arr = [];
         carno.map((data, index) => {

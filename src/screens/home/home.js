@@ -87,6 +87,8 @@ export default class Home extends React.Component {
       })
       .catch(function (err) {
         console.log("Time Out Error", err);
+        // alert(" Network error");
+        self.setState({loading:false})
       });
   }
 
@@ -269,7 +271,7 @@ export default class Home extends React.Component {
                 onPress={() => this.props.navigation.navigate("DriverList")}
               >
                 <View style={styles.secondCard}>
-                  <Image source={require("@images/maintenance.png")} />
+                  <Image source={require("@images/driver.png")}style={{width:100,height:100}} />
                 </View>
                 <Text style={styles.text}>Driver List</Text>
               </TouchableOpacity>

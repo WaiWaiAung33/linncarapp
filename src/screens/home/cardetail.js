@@ -36,7 +36,10 @@ export default class CarDetail extends React.Component {
 
           <View style={styles.secondContainer}>
             <View style={styles.circle}>
-              <Image source={require("@images/car.png")} style={styles.img} />
+              <Image
+                source={require("@images/color-circle.png")}
+                style={styles.img}
+              />
             </View>
             <View>
               <Text style={{ paddingLeft: 10, paddingTop: 10 }}>
@@ -50,7 +53,10 @@ export default class CarDetail extends React.Component {
 
           <View style={styles.secondContainer}>
             <View style={styles.circle}>
-              <Image source={require("@images/car.png")} style={styles.img} />
+              <Image
+                source={require("@images/about.png")}
+                style={{ width: 50, height: 50 }}
+              />
             </View>
             <View>
               <Text style={{ paddingLeft: 10, paddingTop: 10 }}>
@@ -64,7 +70,10 @@ export default class CarDetail extends React.Component {
 
           <View style={styles.secondContainer}>
             <View style={styles.circle}>
-              <Image source={require("@images/car.png")} style={styles.img} />
+              <Image
+                source={require("@images/speedometer.png")}
+                style={styles.img}
+              />
             </View>
             <View>
               <Text style={{ paddingLeft: 10, paddingTop: 10 }}>41267</Text>
@@ -76,7 +85,10 @@ export default class CarDetail extends React.Component {
 
           <View style={styles.secondContainer}>
             <View style={styles.circle}>
-              <Image source={require("@images/car.png")} style={styles.img} />
+              <Image
+                source={require("@images/calendar.png")}
+                style={{ width: 25, height: 25 }}
+              />
             </View>
             <View>
               <Text style={{ paddingLeft: 10, paddingTop: 10 }}>
