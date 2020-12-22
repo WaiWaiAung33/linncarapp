@@ -19,7 +19,7 @@ import LoadingModal from "@components/LoadingModal";
 
 //import api
 const axios = require("axios");
-import { CarCreateApi, CarlistApi } from "@api/Url";
+import { CarCreateApi } from "@api/Url";
 import FormData from "form-data";
 
 export default class CreateCar extends React.Component {
@@ -31,8 +31,8 @@ export default class CreateCar extends React.Component {
       usagename: "",
       reason: "",
       startkilo: "",
-      carno: { value: null, label: null },
-      Carno: [],
+     car_id:null,
+     carno:null,
       access_token: null,
       dirverid: null,
       imagePath: null,
@@ -59,11 +59,11 @@ export default class CreateCar extends React.Component {
       dirverid: dirver,
       dirvername: dirvername,
       startkilo: this.props.navigation.getParam("data").end_kilo,
+      car_id:this.props.navigation.getParam("data").id,
+      carno:this.props.navigation.getParam("data").car_no
     });
 
     // console.log(this.props.navigation.getParam("car_id"));
-
-    await this._getCarlist(this.page);
     this.Clock = setInterval(() => this.GetTime(), 1000);
   }
 
@@ -133,34 +133,7 @@ export default class CreateCar extends React.Component {
     });
   }
 
-  //call api
-  _getCarlist = async (page) => {
-    var self = this;
-    const url = CarlistApi + page;
-    // console.log(self.state.search);
-    axios
-      .get(url, {
-        headers: {
-          Accept: "application/json",
-          Authorization: "Bearer " + self.state.access_token,
-        },
-      })
-      .then(function (response) {
-        // console.log(response.data);
-        let carno = response.data.car_list;
-        let arr = [];
-        carno.map((data, index) => {
-          var obj = { value: data.id.toString(), label: data.car_no };
-          arr.push(obj);
-        });
-        self.setState({
-          Carno: arr,
-        });
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
-  };
+ 
 
   //create car report
   _handleOnSave = async () => {
@@ -170,11 +143,7 @@ export default class CreateCar extends React.Component {
       this.setState({ ISERRORSTARTPLACE: true });
       isError = true;
     }
-    if (this.state.carno.value == null) {
-      // alert("Helo");
-      this.setState({ ISERRORCAR: true });
-      isError = true;
-    }
+  
     if (this.state.name == "") {
       // alert("Helo");
       this.setState({ ISERRORNAME: true });
@@ -200,7 +169,7 @@ export default class CreateCar extends React.Component {
       };
       const formData = new FormData();
       const { imagePath } = self.state;
-      formData.append("car_id", self.state.carno.value);
+      formData.append("car_id", self.state.car_id);
       formData.append("driver_id", self.state.dirverid);
       formData.append("start_place", self.state.startplace);
       formData.append("reason", self.state.reason);
@@ -233,13 +202,7 @@ export default class CreateCar extends React.Component {
     }
   };
 
-  //handle usertype
-  _handleOnSelectCarno(value, label) {
-    this.setState({
-      carno: { value: value, label: label },
-      ISERRORCAR: false,
-    });
-  }
+
 
   //image
   _handleOnChooseImage(image) {
@@ -286,19 +249,13 @@ export default class CreateCar extends React.Component {
               <Text style={styles.labelStyle}>Car No</Text>
             </View>
             <View style={styles.textInputContainer}>
-              <DropDown
+            <TextInput
+                // keyboardType="number-pad"
+                style={styles.textInputStyle}
                 value={this.state.carno}
-                widthContainer="100%"
-                options={this.state.Carno}
-                onSelect={(value, label) =>
-                  this._handleOnSelectCarno(value, label)
-                }
-                placeholder="Select car_no..."
-              ></DropDown>
-              <ErrorText
-                errMessage="please select carno"
-                isShow={this.state.ISERRORCAR}
-              />
+                editable={false}
+              ></TextInput>
+    
             </View>
           </View>
 

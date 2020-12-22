@@ -1,149 +1,107 @@
-import { StatusBar } from "expo-status-bar";
 import React from "react";
 import {
-  StyleSheet,
   View,
-  Text,
-  Image,
-  TextInput,
-  TouchableOpacity,
   AsyncStorage,
-  FlatList,
-  ActivityIndicator,
-  RefreshControl,
+  Text,
+  StyleSheet,
+  TextInput,
+  Image,
+  TouchableOpacity,
+  ScrollView,
 } from "react-native";
 
-//import component
+//import components
 import CarListCard from "@components/carlistCard";
 import Loading from "@components/Loading";
 
 //import api
 const axios = require("axios");
-import { CarlistApi } from "@api/Url";
+import CarListApi from "@api/CarListUrl";
 
 export default class CarList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: [],
       access_token: null,
+      data: [],
+      isLoading: false,
       refreshing: false,
       isFooterLoading: false,
-      isSearched: false,
-      isLoading: true,
-      count: null,
-      search: "",
-      arrIndex: null,
+      carlist: [],
       tempdata: [],
+      searchCarlist: [],
+      isSearched: false,
+      carno: "",
+      keyword: "",
+      arrIndex: null,
+      count:0
     };
-    this.page = 1;
+    // this.page = 1;
+    this.CarListApi = new CarListApi();
   }
-
   async componentDidMount() {
     const access_token = await AsyncStorage.getItem("access_token");
-    this.setState({
-      access_token: access_token,
-    });
-
-    const { navigation } = this.props;
-    this.focusListener = navigation.addListener("didFocus", async () => {
-      await this._getCarlist(this.page);
-    });
+    this.setState({ access_token: access_token });
+    this.setState({ isLoading: true }); // Start page loading
+    this.getAllCarList();
   }
 
-  //call api
-  _getCarlist = async (page) => {
-    if (this.state.isSearched == true) {
-      this.setState({
-        data: [],
+  getAllCarList() {
+    var self = this;
+
+    //if isSearch previous state is true , need to set to false and clear business data
+    if (self.state.isSearched) {
+      self.setState({
+        carlist: [],
         isSearched: false,
+        carno: "",
       });
     }
-    var self = this;
-    // console.log(self.state.search);
-    const url = CarlistApi + page + "&keyword=" + self.state.search;
-    // console.log(url);
-
-    axios
-      .get(url, {
-        headers: {
-          Accept: "application/json",
-          Authorization: "Bearer " + self.state.access_token,
-        },
-      })
+    this.CarListApi.getAllCarList()
       .then(function (response) {
-        // console.log("Car List Api",response.data.data.data);
+        // console.log(response.data.data.data);
         self.setState({
-          data: [...self.state.data, ...response.data.data.data],
-          count: response.data.count,
+          // tempBusiness: response.data.data.data,
+          // carlist:response.data.car_list,
+          carlist: [...self.state.carlist, ...response.data.car_list],
           refreshing: false,
           isLoading: false,
           isFooterLoading: false,
-          tempdata: response.data.data.data,
-          // tempData: response.data.history.data,
+          count:response.data.count
         });
       })
-      .catch(function (err) {
-        // alert("Error");
+      .catch(function (error) {
+        console.log("Car List", error);
         self.setState({
-          refreshing: false,
           isLoading: false,
+          refreshing: false,
           isFooterLoading: false,
         });
-        // console.log("Customer Error", err);
       });
-  };
-
-  //handelSearch
-
-  _handleOnSearch = async (page) => {
-    this.state.data = [];
-    this.state.count = null;
-    var self = this;
-    self.setState({ isSearched: false });
-    const url = CarlistApi + page + "&keyword=" + self.state.search;
-    // console.log(url);
-    axios
-      .get(url, {
-        headers: {
-          Accept: "application/json",
-          Authorization: "Bearer " + self.state.access_token,
-        },
-      })
-      // console.log(headers)
-      .then(function (response) {
-        // console.log(response.data);
-        self.setState({
-          data: [...self.state.data, ...response.data.data.data],
-          count: response.data.count,
-          refreshing: false,
-          isLoading: false,
-          isFooterLoading: false,
-          // searchTravel: response.data.history.data,
-        });
-      })
-      .catch(function (err) {
-        // alert("Error");
-        self.setState({
-          refreshing: false,
-          isLoading: false,
-          isFooterLoading: false,
-        });
-        // console.log("Customer Error", err);
-      });
-  };
-
-  //handel Detail
-  _handleDetail(arrIndex, item) {
-    // alert(item.status);
-    // console.log(item);
-    if (arrIndex == 1) {
-      this.props.navigation.navigate("CarDetail", { datas: item });
-    }
   }
 
-  //handle Car State
-  //handel Detail
+  _handleOnSearch() {
+    const self = this; // *
+    self.state.carlist = [];
+    self.state.count = 0
+    // alert(self.state.keyword);
+    console.log(this.CarListApi.getCarListbyID);
+    self.setState({ isSearched: true });
+    const { keyword } = this.state;
+    this.CarListApi.getCarListbyID(keyword)
+      .then(function (response) {
+        console.log(response.data);
+        self.setState({
+          // searchCarlist: response.data.car_list,
+          carlist: [...self.state.carlist, ...response.data.car_list],
+          count:response.data.count
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
   _handleCarState(arrIndex, item) {
     // alert(item.status);
     // console.log(item);
@@ -156,57 +114,34 @@ export default class CarList extends React.Component {
     }
   }
 
-  //retrieve More data
-  handleLoadMore = () => {
-    this.setState({ isFooterLoading: true }); // Start Footer loading
-    this.page = this.page + 1;
-    this._getCarlist(this.page); // method for API call
-  };
-
-  //renderfooter
-  renderFooter = () => {
-    //it will show indicator at the bottom of the list when data is loading
-    if (this.state.isFooterLoading) {
-      return <ActivityIndicator size="large" style={{ color: "#000" }} />;
-    } else {
-      return null;
+  _handleDetail(arrIndex, item) {
+    // alert(item.status);
+    // console.log(item);
+    if (arrIndex == 1) {
+      this.props.navigation.navigate("CarDetail", { datas: item });
     }
-  };
-
-  //RefreshControl
-
-  onRefresh = () => {
-    this.setState({
-      data: [],
-      refreshing: true,
-    });
-    this._getCarlist(this.page);
-  };
+  }
 
   render() {
-    // console.log("Car List",this.props.navigation.getParam("car_id"));
     if (this.state.isLoading) {
       return <Loading />;
     }
-
-    var { isSearched, data, count } = this.state;
-    // var dataList = isSearched ? searchTravel : data;
-    var dataList = data;
-
+    const { isSearched, carlist, searchCarlist,count } = this.state;
+    const dataList = isSearched ? searchCarlist : carlist;
     return (
-      <View style={styles.container}>
+      <View style={{ flex: 1 }}>
         <View style={styles.searchContainer}>
           <View style={styles.searchTextInput}>
             <TextInput
-              value={this.state.search}
+              value={this.state.keyword}
               style={styles.textSearch}
               placeholder="Search ..."
-              onChangeText={(value) => this.setState({ search: value })}
+              onChangeText={(value) => this.setState({ keyword: value })}
             ></TextInput>
           </View>
           <TouchableOpacity
-            onPress={() => this._handleOnSearch(this.page)}
             style={styles.searchBtn}
+            onPress={() => this._handleOnSearch()}
           >
             <Image
               source={require("@images/search.png")}
@@ -214,7 +149,6 @@ export default class CarList extends React.Component {
             />
           </TouchableOpacity>
         </View>
-
         <Text
           style={{
             color: "#0470DD",
@@ -225,45 +159,27 @@ export default class CarList extends React.Component {
         >
           Total = {count}
         </Text>
-
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={dataList}
-          // extraData={this.state}
-          refreshControl={
-            <RefreshControl
-              refreshing={this.state.refreshing}
-              onRefresh={this.onRefresh.bind(this)}
-            />
-          }
-          ItemSeparatorComponent={this.FlatListItemSeparator}
-          renderItem={({ item }) => (
-            // console.log(item),
-            <View style={{ marginTop: 5 }}>
-              <CarListCard
-                carno={item.car_no}
-                kilo={item.end_kilo}
-                status={item.status}
-                onPress={() => this._handleDetail(1, item)}
-                // onPress={() => this.props.navigation.navigate("CarDetail",{data:item})}
-                onPressUse={() => this._handleCarState(1, item)}
-                arrIndex={1}
-              />
-            </View>
-          )}
-          keyExtractor={(item, index) => index.toString()}
-          // ListHeaderComponent={this.renderFilter.bind(this)}
-          ListFooterComponent={this.renderFooter.bind(this)}
-          onEndReachedThreshold={0.5}
-          contentContainerStyle={{
-            flexGrow: 1,
-          }}
-          onEndReached={() => (!isSearched ? this.handleLoadMore() : {})}
-        />
+        <ScrollView>
+          {this.state.carlist.map((item, index) => {
+            return (
+              <View style={{ marginTop: 10 }} key={index}>
+                <CarListCard
+                  carno={item.car_no}
+                  kilo={item.end_kilo}
+                  status={item.status}
+                  onPress={() => this._handleDetail(1, item)}
+                  onPressUse={() => this._handleCarState(1, item)}
+                  arrIndex={1}
+                />
+              </View>
+            );
+          })}
+        </ScrollView>
       </View>
     );
   }
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

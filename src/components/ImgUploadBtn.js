@@ -110,11 +110,15 @@ export default class ImgUploadBtn extends React.Component {
               this.onPressUploadBtn();
             }}
           >
-            <View>
+            <View style={{justifyContent:"center"}}>
               <Image
                 style={styles.btnIcon}
                 source={require("@images/camera.png")}
               />
+             
+            </View>
+            <View style={{justifyContent:"center"}}>
+            <Text style={{paddingLeft:10}}>Choose Image</Text>
             </View>
           </TouchableOpacity>
         )}
@@ -149,17 +153,18 @@ const styles = StyleSheet.create({
     // flexDirection: "row",
     borderWidth: 1,
     // width:"50%",
-    height: 100,
+    height: 50,
     // paddingHorizontal: 10,
-    alignItems: "center",
+    // alignItems: "center",
     borderRadius: 5,
     borderStyle: "solid",
-    justifyContent: "center",
+    // justifyContent: "center",
     borderColor: "#E3EEF5",
     backgroundColor: "#E3EEF5",
     elevation: 3,
     width:230,
     marginLeft:15,
+    flexDirection:"row",
     // shadowOffset: { width: 2, height: 2 },
     // shadowOpacity: 0.5,
     // flex: 1,
@@ -168,6 +173,7 @@ const styles = StyleSheet.create({
   btnIcon: {
     width: 30,
     height: 30,
+    marginLeft:10
   },
   btnText: {
     fontSize: 14,

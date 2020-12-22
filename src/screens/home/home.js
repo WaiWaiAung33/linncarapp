@@ -31,7 +31,7 @@ export default class Home extends React.Component {
       isLoading: false,
       car_id: null,
       report_id: null,
-      loading: true,
+      // loading: true,
     };
   }
   async componentDidMount() {
@@ -47,10 +47,10 @@ export default class Home extends React.Component {
       driverid: userid,
     });
     const { navigation } = this.props;
-    // this.focusListener = navigation.addListener("didFocus", async () => {
-
-    // });
-    this._getTimeOut();
+    this.focusListener = navigation.addListener("didFocus", async () => {
+      this._getTimeOut();
+    });
+    // this._getTimeOut();
   }
 
   UNSAFE_componentWillUnmount() {
@@ -82,13 +82,13 @@ export default class Home extends React.Component {
           isLoading: false,
           car_id: response.data.car_id,
           report_id: response.data.report_id,
-          loading: false,
+          // loading: false,
         });
       })
       .catch(function (err) {
         console.log("Time Out Error", err);
         // alert(" Network error");
-        self.setState({loading:false})
+        // self.setState({loading:false})
       });
   }
 
@@ -102,14 +102,15 @@ export default class Home extends React.Component {
     //   return <Loading />;
     // }
     // console.log(this.state.car_id);
-    return this.state.loading ? (
-      <View style={styles.container}>
-        <StatusBar hidden={true} />
-        <View style={styles.loadingView}>
-          <ActivityIndicator size="large" color="#1179C2" />
-        </View>
-      </View>
-    ) : (
+    // return this.state.loading ? (
+    //   <View style={styles.container}>
+    //     <StatusBar hidden={true} />
+    //     <View style={styles.loadingView}>
+    //       <ActivityIndicator size="large" color="#1179C2" />
+    //     </View>
+    //   </View>
+    // ) : (
+      return(
       <View style={styles.container}>
         <StatusBar style="auto" />
         <View style={styles.secondContainer}>

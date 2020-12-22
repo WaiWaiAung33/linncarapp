@@ -17,7 +17,6 @@ import LoadingModal from "@components/LoadingModal";
 //import api
 const axios = require("axios");
 import {
-  CarlistApi,
   editmaintenceapi,
   ImgMaintenanceuploadApi,
 } from "@api/Url";
@@ -27,8 +26,6 @@ export default class EditMaintence extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      carno: { value: null, label: null },
-      Carno: [],
       access_token: null,
       dirvername: null,
       amount: null,
@@ -39,8 +36,10 @@ export default class EditMaintence extends React.Component {
       id: null,
       modalVisible: false,
       carstate: null,
+      car_id:null,
+      carno:null
     };
-    this.page = 0;
+   
   }
 
   async componentDidMount() {
@@ -48,19 +47,20 @@ export default class EditMaintence extends React.Component {
     const dirvername = await AsyncStorage.getItem("name");
     const dirver = await AsyncStorage.getItem("userid");
     const data = this.props.navigation.getParam("datas");
-    // console.log(data.vPhoto);
+    console.log(data);
     this.setState({
       access_token: access_token,
       dirvername: dirvername,
       dirverid: dirver,
       id: data.id,
-      carstate: data.car_no,
+      carno: data.car_no,
+      car_id:data.car_id,
       dirvername: data.dname,
       amount: data.amount,
       reason: data.reason,
       imagePath: ImgMaintenanceuploadApi + data.vPhoto,
     });
-    await this._getCarlist(this.page);
+
   }
 
   //create car report
@@ -74,7 +74,7 @@ export default class EditMaintence extends React.Component {
     };
     const formData = new FormData();
     const { imagePath } = self.state;
-    formData.append("car_no", self.state.carno.value);
+    formData.append("car_no", self.state.car_id);
     formData.append("driver_name", self.state.dirverid);
     formData.append("reason", self.state.reason);
     formData.append("amount", self.state.amount);
@@ -106,47 +106,7 @@ export default class EditMaintence extends React.Component {
       });
   };
 
-  //call api
-  _getCarlist = async (page) => {
-    var self = this;
-    const url = CarlistApi + page;
-
-    const car = self.state.carstate;
-    // console.log("car",car);
-    // console.log(self.state.search);
-    axios
-      .get(url, {
-        headers: {
-          Accept: "application/json",
-          Authorization: "Bearer " + self.state.access_token,
-        },
-      })
-      .then(function (response) {
-        // console.log(response.data);
-        let carno = response.data.car_list;
-        let arr = [];
-        carno.map((data, index) => {
-          if (car == data.car_no) {
-            // console.log("id",data.id);
-            self.setState({
-              carno: {
-                value: data.id.toString(),
-                label: data.car_no,
-              },
-            });
-          }
-          var obj = { value: data.id.toString(), label: data.car_no };
-          arr.push(obj);
-        });
-        self.setState({
-          Carno: arr,
-        });
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
-  };
-
+ 
   //handle usertype
   _handleOnSelectCarno(value, label) {
     this.setState({
@@ -177,15 +137,13 @@ export default class EditMaintence extends React.Component {
           </View>
 
           <View style={styles.textInputContainer}>
-            <DropDown
+          <TextInput
               value={this.state.carno}
-              widthContainer="100%"
-              options={this.state.Carno}
-              onSelect={(value, label) =>
-                this._handleOnSelectCarno(value, label)
-              }
-              placeholder="Select car_no..."
-            ></DropDown>
+              // keyboardType="number-pad"
+              style={styles.textInputStyle}
+              editable={false}
+              // onChangeText={(value)=>this.setState({dirvername:value})}
+            ></TextInput>
           </View>
         </View>
 

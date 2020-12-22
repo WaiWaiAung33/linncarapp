@@ -307,10 +307,10 @@ export default class RefuelList extends React.Component {
 
         <View
           style={{
-            // flex: 1,
-            justifyContent: "flex-end",
-            alignItems: "flex-end",
-            margin: 10,
+            position: "absolute",
+            right: 20,
+            bottom: 40,
+            
           }}
         >
           <TouchableOpacity

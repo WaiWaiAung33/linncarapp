@@ -19,15 +19,13 @@ import LoadingModal from "@components/LoadingModal";
 
 //import api
 const axios = require("axios");
-import { CarlistApi, CreateRefuelApi } from "@api/Url";
+import { CreateRefuelApi } from "@api/Url";
 import FormData from "form-data";
 
 export default class CreateRefuel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      carno: { value: null, label: null },
-      Carno: [],
       access_token: null,
       dirvername: null,
       Kilo: null,
@@ -39,6 +37,8 @@ export default class CreateRefuel extends React.Component {
       ISERRORPRICE: false,
       ISERRORIMAGE: false,
       modalVisible: false,
+      car_id:null,
+      carno:null
     };
     this.page = 0;
   }
@@ -51,14 +51,11 @@ export default class CreateRefuel extends React.Component {
       access_token: access_token,
       dirvername: dirvername,
       dirverid: dirver,
-      carno: {
-        value: this.props.navigation.getParam("car_id"),
-        label: this.props.navigation.getParam("carno"),
-      },
+      car_id:this.props.navigation.getParam("car_id"),
+      carno:this.props.navigation.getParam("carno")
+   
     });
     // console.log(this.props.navigation.getParam("car_id"));
-
-    await this._getCarlist(this.page);
   }
 
   //create car report
@@ -90,7 +87,7 @@ export default class CreateRefuel extends React.Component {
       };
       const formData = new FormData();
       const { imagePath } = self.state;
-      formData.append("car_no", self.state.carno.value);
+      formData.append("car_no", self.state.car_id);
       formData.append("driver_name", self.state.dirverid);
       formData.append("kilo", self.state.Kilo);
       formData.append("price", self.state.price);
@@ -119,42 +116,7 @@ export default class CreateRefuel extends React.Component {
     }
   };
 
-  //call api
-  _getCarlist = async (page) => {
-    var self = this;
-    const url = CarlistApi + page;
-    // console.log(self.state.search);
-    axios
-      .get(url, {
-        headers: {
-          Accept: "application/json",
-          Authorization: "Bearer " + self.state.access_token,
-        },
-      })
-      .then(function (response) {
-        // console.log(response.data);
-        let carno = response.data.car_list;
-        let arr = [];
-        carno.map((data, index) => {
-          var obj = { value: data.id.toString(), label: data.car_no };
-          arr.push(obj);
-        });
-        self.setState({
-          Carno: arr,
-        });
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
-  };
-
-  //handle usertype
-  _handleOnSelectCarno(value, label) {
-    this.setState({
-      carno: { value: value, label: label },
-    });
-  }
-
+ 
   //image
   _handleOnChooseImage(image) {
     this.setState({ imagePath: image.uri, ISERRORIMAGE: false });
@@ -184,15 +146,12 @@ export default class CreateRefuel extends React.Component {
                 <Text style={styles.labelStyle}>Car No</Text>
               </View>
               <View style={styles.textInputContainer}>
-                <DropDown
+              <TextInput
                   value={this.state.carno}
-                  widthContainer="100%"
-                  options={this.state.Carno}
-                  onSelect={(value, label) =>
-                    this._handleOnSelectCarno(value, label)
-                  }
-                  placeholder="Select car_no..."
-                ></DropDown>
+                  // keyboardType="number-pad"
+                  style={styles.textInputStyle}
+                  editable={false}
+                ></TextInput>
               </View>
             </View>
 

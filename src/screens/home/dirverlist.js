@@ -59,7 +59,7 @@ export default class DriverList extends React.Component {
       });
     }
     var self = this;
-    const url = driverlistapi + page + "&keyword=" + self.state.search;
+    const url = driverlistapi + page;
     // console.log(url);
 
     axios

@@ -8,7 +8,9 @@ export const OTPApi = BaseUrl + "verifyOtp";
 export const TimeoutApi = BaseUrl + "checkEndTimeStatus/";
 
 //carlist api
-export const CarlistApi = BaseUrl + "carlists?page=";
+
+// export const CarlistHomeApi = BaseUrl + "carlists?page=";
+export const CarlistApi = BaseUrl + "carlists";
 
 //car create report
 export const CarCreateApi = BaseUrl + "createreport";
@@ -38,8 +40,7 @@ export const gethistorydetailapi = BaseUrl + "report?id=";
 //get dirver list api
 export const driverlistapi = BaseUrl + "getAllDriver?page=";
 
-export const createmaintenceapi =
-  "http://128.199.79.79/cardb/public/api/createMaintenance";
+export const createmaintenceapi = BaseUrl + "createMaintenance";
 
 export const editmaintenceapi = BaseUrl + "editMaintenance";
 
