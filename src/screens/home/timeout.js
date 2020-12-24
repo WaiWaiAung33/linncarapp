@@ -15,6 +15,7 @@ import DropDown from "@components/DropDown";
 import ImgUploadBtn from "@components/ImgUploadBtn";
 import SuccessModal from "@components/SuccessModal";
 import LoadingModal from "@components/LoadingModal";
+import ErrorText from "@components/ErrorText";
 
 //import api
 const axios = require("axios");
@@ -40,6 +41,10 @@ export default class TimeOut extends React.Component {
       report_id: null,
       status: 0,
       modalVisible: false,
+      ISERRORENDPLACE: false,
+      ISERRORROUTE: false,
+      ISERRORENDKILO: false,
+      ISERRORENDKILOPHOTO: false,
     };
     this.page = 0;
   }
@@ -130,6 +135,28 @@ export default class TimeOut extends React.Component {
 
   //create car report
   _handleOnSave = async () => {
+    let isError = false;
+    if (this.state.startplace == "") {
+      // alert("Helo");
+      this.setState({ ISERRORENDPLACE: true });
+      isError = true;
+    }
+    if (this.state.reason == "") {
+      // alert("Helo");
+      this.setState({ ISERRORROUTE: true });
+      isError = true;
+    }
+    if (this.state.startkilo == "") {
+      // alert("Helo");
+      this.setState({ ISERRORENDKILO: true });
+      isError = true;
+    }
+    if (this.state.imagePath == null) {
+      // alert("Helo");
+      this.setState({ ISERRORENDKILOPHOTO: true });
+      isError = true;
+    }
+    if (!isError) {
     const self = this;
     self.setState({ modalVisible: true });
     const headers = {
@@ -171,11 +198,12 @@ export default class TimeOut extends React.Component {
       .catch(function (err) {
         self.setState({ isOpenSuccessModel: false });
       });
+    }
   };
 
   //image
   _handleOnChooseImage(image) {
-    this.setState({ imagePath: image.uri });
+    this.setState({ imagePath: image.uri , ISERRORENDKILOPHOTO:false });
   }
 
   //on close
@@ -253,8 +281,14 @@ export default class TimeOut extends React.Component {
                   value={this.state.startplace}
                   // keyboardType="number-pad"
                   style={styles.textInputStyle}
-                  onChangeText={(value) => this.setState({ startplace: value })}
+                  onChangeText={(value) =>
+                    this.setState({ startplace: value, ISERRORENDPLACE: false })
+                  }
                 ></TextInput>
+                <ErrorText
+                  errMessage="please enter end place"
+                  isShow={this.state.ISERRORENDPLACE}
+                />
               </View>
             </View>
 
@@ -281,8 +315,14 @@ export default class TimeOut extends React.Component {
                   value={this.state.reason}
                   // keyboardType="number-pad"
                   style={styles.textAreaStyle}
-                  onChangeText={(value) => this.setState({ reason: value })}
+                  onChangeText={(value) =>
+                    this.setState({ reason: value, ISERRORROUTE: false })
+                  }
                 ></TextInput>
+                <ErrorText
+                  errMessage="please enter route name"
+                  isShow={this.state.ISERRORROUTE}
+                />
               </View>
             </View>
 
@@ -296,8 +336,14 @@ export default class TimeOut extends React.Component {
                   keyboardType="number-pad"
                   style={styles.textInputStyle}
                   // editable={false}
-                  onChangeText={(value) => this.setState({ startkilo: value })}
+                  onChangeText={(value) =>
+                    this.setState({ startkilo: value, ISERRORENDKILO: false })
+                  }
                 ></TextInput>
+                <ErrorText
+                  errMessage="please enter end kilo"
+                  isShow={this.state.ISERRORENDKILO}
+                />
               </View>
             </View>
 
@@ -309,6 +355,10 @@ export default class TimeOut extends React.Component {
                 <ImgUploadBtn
                   imagePath={this.state.imagePath}
                   onChooseImage={this._handleOnChooseImage.bind(this)}
+                />
+                <ErrorText
+                  errMessage="please enter end kilo photo"
+                  isShow={this.state.ISERRORENDKILOPHOTO}
                 />
               </View>
             </View>
