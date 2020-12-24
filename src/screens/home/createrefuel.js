@@ -111,7 +111,6 @@ export default class CreateRefuel extends React.Component {
           self.setState({ isOpenSuccessModel: true, modalVisible: false });
         })
         .catch(function (err) {
-          alert("Network Error");
           self.setState({ isOpenSuccessModel: false, modalVisible: false });
         });
     }
@@ -221,7 +220,7 @@ export default class CreateRefuel extends React.Component {
                   onChooseImage={this._handleOnChooseImage.bind(this)}
                 />
                 <ErrorText
-                  errMessage="please choose photo"
+                  errMessage="please enter start place"
                   isShow={this.state.ISERRORIMAGE}
                 />
               </View>
