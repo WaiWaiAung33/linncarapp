@@ -1,5 +1,15 @@
 import React from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity,Linking,Platform } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Linking,
+  Platform,
+} from "react-native";
+
+import { ImgDriveruploadApi } from "@api/Url";
 
 export default class DriverListCard extends React.Component {
   _OnPress() {
@@ -12,20 +22,35 @@ export default class DriverListCard extends React.Component {
     let phoneNumber = "";
 
     if (Platform.OS === "android") {
-        phoneNumber = `tel:${number}`;
-      } else {
-        phoneNumber = `telprompt:${number}`;
-      }
-      Linking.openURL(phoneNumber);
+      phoneNumber = `tel:${number}`;
+    } else {
+      phoneNumber = `telprompt:${number}`;
+    }
+    Linking.openURL(phoneNumber);
   }
   render() {
     return (
       <View style={styles.container}>
         <TouchableOpacity onPress={() => this._OnPress()}>
           <View style={styles.secondContainer}>
-            <View style={styles.circle}>
-              <Image source={require("@images/driver.png")} style={{width:100,height:100}}/>
-            </View>
+            {this.props.dphoto ? (
+             
+                <Image
+                  source={{
+                    uri: ImgDriveruploadApi + this.props.dphoto,
+                  }}
+                  style={{ width: 80, height: 80, borderRadius: 40 }}
+                />
+            
+            ) : (
+              <View style={styles.circle}>
+              <Image
+                source={require("@images/driver.png")}
+                style={{ width: 100, height: 100 }}
+              />
+                </View>
+            )}
+
             <View style={{ justifyContent: "center", marginLeft: 10 }}>
               <Text style={styles.text}>{this.props.name}</Text>
 

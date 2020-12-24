@@ -56,3 +56,7 @@ export const ImgHistoryuploadApi =
 
 export const timeoutApi = BaseUrl +"endreportcreate/";
 
+//img history api
+export const ImgDriveruploadApi =
+  "http://128.199.79.79/cardb/public/uploads/drivers/";
+

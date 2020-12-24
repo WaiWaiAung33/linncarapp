@@ -213,6 +213,7 @@ export default class DriverList extends React.Component {
               <DriverListCard
                 name={item.dname}
                 phone={item.phone}
+                dphoto={item.dphoto}
                 OnPress={() =>
                   this.props.navigation.navigate("dirverlistdetail", {
                     datas: item,
