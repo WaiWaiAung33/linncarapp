@@ -26,7 +26,7 @@ export default class HistoryCard extends React.Component {
               flex: 1,
             }}
           >
-            <Text>{Moment(this.props.date).format("DD-MM-YYYY")}1</Text>
+            <Text>{Moment(this.props.date).format("DD-MM-YYYY")}</Text>
           </View>
         </View>
         </TouchableOpacity>
