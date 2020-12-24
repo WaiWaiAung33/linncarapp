@@ -303,6 +303,7 @@ export default class History extends React.Component {
               <HistoryCard
                 carno={item.car_no}
                 date={item.created_at}
+                photo={item.photo}
                 OnPress={() =>
                   this.props.navigation.navigate("HistoryDetail", {
                     datas: item,

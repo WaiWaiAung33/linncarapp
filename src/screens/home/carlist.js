@@ -59,7 +59,7 @@ export default class CarList extends React.Component {
     }
     this.CarListApi.getAllCarList()
       .then(function (response) {
-        // console.log(response.data.data.data);
+        // console.log(response.data.car_list);
         self.setState({
           // tempBusiness: response.data.data.data,
           // carlist:response.data.car_list,
@@ -167,6 +167,7 @@ export default class CarList extends React.Component {
                   carno={item.car_no}
                   kilo={item.end_kilo}
                   status={item.status}
+                  photo={item.photo}
                   onPress={() => this._handleDetail(1, item)}
                   onPressUse={() => this._handleCarState(1, item)}
                   arrIndex={1}

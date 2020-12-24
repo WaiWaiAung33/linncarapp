@@ -1,6 +1,8 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 
+import { ImgCaruploadApi } from "@api/Url";
+
 export default class carlistCard extends React.Component {
   _OnPress() {
     if (this.props.onPress) {
@@ -18,9 +20,23 @@ export default class carlistCard extends React.Component {
         <View style={styles.card}>
           <TouchableOpacity onPress={() => this._OnPress()} activeOpacity={0.8}>
             <View style={styles.secondCard}>
-              <View style={styles.circle}>
-                <Image source={require("@images/car.png")} />
-              </View>
+              {
+                this.props.photo ? (
+                  
+                  <Image 
+                  source={{
+                    uri: ImgCaruploadApi + this.props.photo,
+                  }}
+                  style={{width:100,height:100,borderRadius:50}}
+                   />
+               
+                ):(
+                  <View style={styles.circle}>
+                  <Image source={require("@images/car.png")} />
+                </View>
+                )
+              }
+             
               <View style={{ flex: 1, paddingLeft: 8 }}>
                 <Text style={styles.text}>{this.props.carno}</Text>
                 <Text style={styles.text}>{this.props.kilo} Kilo</Text>

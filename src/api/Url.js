@@ -60,3 +60,7 @@ export const timeoutApi = BaseUrl +"endreportcreate/";
 export const ImgDriveruploadApi =
   "http://128.199.79.79/cardb/public/uploads/drivers/";
 
+
+  //img car photo api
+export const ImgCaruploadApi ="http://128.199.79.79/cardb/public/uploads/car/";
+
