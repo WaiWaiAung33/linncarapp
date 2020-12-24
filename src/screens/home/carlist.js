@@ -85,7 +85,7 @@ export default class CarList extends React.Component {
     self.state.carlist = [];
     self.state.count = 0
     // alert(self.state.keyword);
-    console.log(this.CarListApi.getCarListbyID);
+    // console.log(this.CarListApi.getCarListbyID);
     self.setState({ isSearched: true });
     const { keyword } = this.state;
     this.CarListApi.getCarListbyID(keyword)
