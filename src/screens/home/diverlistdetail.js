@@ -11,6 +11,8 @@ import {
 } from "react-native";
 import Moment from "moment";
 
+import { ImgDriveruploadApi } from "@api/Url";
+
 export default class DireverListDetail extends React.Component {
   constructor(props) {
     super(props);
@@ -32,15 +34,34 @@ export default class DireverListDetail extends React.Component {
     // console.log("Data",data);
     return (
       <View style={styles.container}>
-        <View style={{ justifyContent: "center", alignItems: "center" }}>
-          <View style={styles.firstCircle}>
+        {data.dphoto ? (
+          <View style={{ justifyContent: "center", alignItems: "center" }}>
             <Image
-              source={require("@images/driver.png")}
-              style={{ width: 150, height: 150 }}
+              source={{
+                uri: ImgDriveruploadApi + data.dphoto,
+              }}
+              style={{
+                width: 100,
+                height: 100,
+                borderRadius: 50,
+                marginTop: 10,
+              }}
             />
+
+            <Text style={{ paddingTop: 10, fontSize: 16 }}>{data.dname}</Text>
           </View>
-          <Text style={{ paddingTop: 10, fontSize: 16 }}>{data.dname}</Text>
-        </View>
+        ) : (
+          <View style={{ justifyContent: "center", alignItems: "center" }}>
+            <View style={styles.firstCircle}>
+              <Image
+                source={require("@images/driver.png")}
+                style={{ width: 150, height: 150 }}
+              />
+            </View>
+            <Text style={{ paddingTop: 10, fontSize: 16 }}>{data.dname}</Text>
+          </View>
+        )}
+
         <ScrollView>
           <View style={styles.secondContainer}>
             <View style={styles.circle}>
