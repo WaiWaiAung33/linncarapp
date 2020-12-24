@@ -54,10 +54,11 @@ export default class History extends React.Component {
     // console.log("Start Date",this.state.start_date);
 
     const { navigation } = this.props;
-    this.focusListener = navigation.addListener("didFocus", async () => {
-      await this._gethistory(this.page);
-      await this._getNewDate();
-    });
+    await this._gethistory(this.page);
+    await this._getNewDate();
+    // this.focusListener = navigation.addListener("didFocus", async () => {
+     
+    // });
   }
 
   async _getNewDate() {
