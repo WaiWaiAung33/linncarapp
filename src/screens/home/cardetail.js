@@ -2,6 +2,8 @@ import React from "react";
 import { View, Text, StyleSheet, Image, ScrollView } from "react-native";
 import Moment from "moment";
 
+import { ImgCaruploadApi } from "@api/Url";
+
 export default class CarDetail extends React.Component {
   constructor(props) {
     super(props);
@@ -11,12 +13,26 @@ export default class CarDetail extends React.Component {
     return (
       <View style={styles.container}>
         <View style={{ justifyContent: "center", alignItems: "center" }}>
-          <View style={styles.firstCircle}>
-            <Image
-              source={require("@images/car.png")}
-              style={{ width: 80, height: 80 }}
-            />
-          </View>
+          {
+            data.photo ? (
+             
+              <Image
+                 source={{
+                  uri: ImgCaruploadApi + data.photo,
+                }}
+                style={{ width: 100, height: 100,borderRadius:50,marginTop:10 }}
+              />
+           
+            ) : (
+              <View style={styles.firstCircle}>
+              <Image
+                source={require("@images/car.png")}
+                style={{ width: 80, height: 80 }}
+              />
+            </View>
+            )
+          }
+         
           <Text style={{ paddingTop: 10, fontSize: 16 }}>{data.car_no}</Text>
         </View>
         <ScrollView>
