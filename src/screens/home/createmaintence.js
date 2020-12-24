@@ -144,7 +144,7 @@ export default class CreateMaintence extends React.Component {
           </View>
           <View style={styles.textInputContainer}>
           <TextInput
-              value={this.state.dirvername}
+              value={this.state.carno}
               editable={false}
               // keyboardType="number-pad"
               style={styles.textInputStyle}
@@ -158,7 +158,7 @@ export default class CreateMaintence extends React.Component {
           </View>
           <View style={styles.textInputContainer}>
             <TextInput
-              value={this.state.carno}
+              value={this.state.dirvername}
               editable={false}
               // keyboardType="number-pad"
               style={styles.textInputStyle}
