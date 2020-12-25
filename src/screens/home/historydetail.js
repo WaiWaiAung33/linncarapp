@@ -81,6 +81,7 @@ export default class HistoryDetail extends React.Component {
         });
       })
       .catch(function (err) {
+        alert("Server Error");
         // console.log("History Error", err);
       });
   };

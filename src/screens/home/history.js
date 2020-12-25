@@ -108,7 +108,8 @@ export default class History extends React.Component {
           isLoading: false,
           isFooterLoading: false,
         });
-        console.log("History Error", err);
+        // console.log("History Error", err);
+        alert("Server Error");
       });
   };
 

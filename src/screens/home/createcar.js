@@ -94,7 +94,8 @@ export default class CreateCar extends React.Component {
         self.setState({ CARNO: arr });
       })
       .catch(function (err) {
-        console.log("Create Car List", err);
+        alert("Server Error");
+        // console.log("Create Car List", err);
       })
   }
 
@@ -234,7 +235,8 @@ export default class CreateCar extends React.Component {
           self.setState({ isOpenSuccessModel: true, modalVisible: false });
         })
         .catch(function (err) {
-          console.log(err);
+          // console.log(err);
+          alert("Server Error");
           self.setState({ isOpenSuccessModel: false, modalVisible: false });
         });
     }
@@ -287,12 +289,12 @@ export default class CreateCar extends React.Component {
               <Text style={styles.labelStyle}>Car No</Text>
             </View>
             <View style={styles.textInputContainer}>
-            <DropDown
-              value={this.state.carno}
-              widthContainer="100%"
-              options={this.state.CARNO}
-              onSelect={(value, label) => this._handleSelect(value, label)}
-            />
+              <DropDown
+                value={this.state.carno}
+                widthContainer="100%"
+                options={this.state.CARNO}
+                onSelect={(value, label) => this._handleSelect(value, label)}
+              />
 
             </View>
           </View>

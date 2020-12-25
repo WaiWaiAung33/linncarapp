@@ -85,7 +85,7 @@ export default class EditRefuel extends React.Component {
         });
       })
       .catch(function (err) {
-        console.log(err);
+        // console.log(err);
       });
   };
 
@@ -127,6 +127,7 @@ export default class EditRefuel extends React.Component {
         self.setState({ isOpenSuccessModel: true, modalVisible: false });
       })
       .catch(function (err) {
+        alert("Server Error");
         self.setState({ isOpenSuccessModel: false, modalVisible: false });
       });
   };
@@ -180,7 +181,7 @@ export default class EditRefuel extends React.Component {
               editable={false}
               // keyboardType="number-pad"
               style={styles.textInputStyle}
-              // onChangeText={()=>this.setState({dirvername:value})}
+            // onChangeText={()=>this.setState({dirvername:value})}
             ></TextInput>
           </View>
         </View>

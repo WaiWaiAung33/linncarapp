@@ -46,7 +46,8 @@ export default class CarUse extends React.Component {
         });
       })
       .catch(function (err) {
-        console.log("Car Using Error", err);
+        // console.log("Car Using Error", err);
+        alert("Server Error");
       });
   };
 

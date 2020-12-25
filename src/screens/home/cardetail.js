@@ -15,24 +15,24 @@ export default class CarDetail extends React.Component {
         <View style={{ justifyContent: "center", alignItems: "center" }}>
           {
             data.photo ? (
-             
+
               <Image
-                 source={{
+                source={{
                   uri: ImgCaruploadApi + data.photo,
                 }}
-                style={{ width: 100, height: 100,borderRadius:50,marginTop:10 }}
+                style={{ width: 100, height: 100, borderRadius: 50, marginTop: 10 }}
               />
-           
+
             ) : (
-              <View style={styles.firstCircle}>
-              <Image
-                source={require("@images/car.png")}
-                style={{ width: 80, height: 80 }}
-              />
-            </View>
-            )
+                <View style={styles.firstCircle}>
+                  <Image
+                    source={require("@images/car.png")}
+                    style={{ width: 80, height: 80 }}
+                  />
+                </View>
+              )
           }
-         
+
           <Text style={{ paddingTop: 10, fontSize: 16 }}>{data.car_no}</Text>
         </View>
         <ScrollView>

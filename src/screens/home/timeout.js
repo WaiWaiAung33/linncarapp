@@ -53,7 +53,7 @@ export default class TimeOut extends React.Component {
     const access_token = await AsyncStorage.getItem("access_token");
     const dirver = await AsyncStorage.getItem("userid");
     const dirvername = await AsyncStorage.getItem("name");
-    console.log("driver id", this.props.navigation.getParam("car_id"));
+    // console.log("driver id", this.props.navigation.getParam("car_id"));
     this.setState({
       access_token: access_token,
       dirverid: dirver,
@@ -157,53 +157,54 @@ export default class TimeOut extends React.Component {
       isError = true;
     }
     if (!isError) {
-    const self = this;
-    self.setState({ modalVisible: true });
-    const headers = {
-      Accept: "application/json",
-      Authorization: "Bearer " + self.state.access_token,
-      "Content-Type": "multipart/form-data",
-    };
-    const formData = new FormData();
-    const { imagePath } = self.state;
-    formData.append("car_id", self.state.carno.value);
-    formData.append("driver_id", self.state.dirverid);
-    formData.append("end_place", self.state.startplace);
-    formData.append("route", self.state.reason);
-    formData.append("usageName", self.state.usagename);
-    formData.append("end_time", self.state.time);
-    formData.append("end_kilo", self.state.startkilo);
-    formData.append("status", self.state.status);
-    if (imagePath) {
-      const uriPart = imagePath.split(".");
-      const fileExtension = uriPart[uriPart.length - 1];
-      const fileName = imagePath.substr(imagePath.lastIndexOf("/") + 1);
+      const self = this;
+      self.setState({ modalVisible: true });
+      const headers = {
+        Accept: "application/json",
+        Authorization: "Bearer " + self.state.access_token,
+        "Content-Type": "multipart/form-data",
+      };
+      const formData = new FormData();
+      const { imagePath } = self.state;
+      formData.append("car_id", self.state.carno.value);
+      formData.append("driver_id", self.state.dirverid);
+      formData.append("end_place", self.state.startplace);
+      formData.append("route", self.state.reason);
+      formData.append("usageName", self.state.usagename);
+      formData.append("end_time", self.state.time);
+      formData.append("end_kilo", self.state.startkilo);
+      formData.append("status", self.state.status);
+      if (imagePath) {
+        const uriPart = imagePath.split(".");
+        const fileExtension = uriPart[uriPart.length - 1];
+        const fileName = imagePath.substr(imagePath.lastIndexOf("/") + 1);
 
-      formData.append("endKilo_photo", {
-        uri: imagePath,
-        name: fileName,
-        type: `image/${fileExtension}`,
-      });
-    }
-    /*console.log(formData);*/
-    const url = timeoutApi + self.state.report_id;
-    axios
-      .post(url, formData, {
-        headers,
-      })
-      .then(function (response) {
-        self.setState({ isOpenSuccessModel: true, modalVisible: false });
-        //   this.props.navigation.navigate("Home");
-      })
-      .catch(function (err) {
-        self.setState({ isOpenSuccessModel: false });
-      });
+        formData.append("endKilo_photo", {
+          uri: imagePath,
+          name: fileName,
+          type: `image/${fileExtension}`,
+        });
+      }
+      /*console.log(formData);*/
+      const url = timeoutApi + self.state.report_id;
+      axios
+        .post(url, formData, {
+          headers,
+        })
+        .then(function (response) {
+          self.setState({ isOpenSuccessModel: true, modalVisible: false });
+          //   this.props.navigation.navigate("Home");
+        })
+        .catch(function (err) {
+          self.setState({ isOpenSuccessModel: false });
+          alert("Server Error");
+        });
     }
   };
 
   //image
   _handleOnChooseImage(image) {
-    this.setState({ imagePath: image.uri , ISERRORENDKILOPHOTO:false });
+    this.setState({ imagePath: image.uri, ISERRORENDKILOPHOTO: false });
   }
 
   //on close

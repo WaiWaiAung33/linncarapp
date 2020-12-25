@@ -36,7 +36,7 @@ export default class CreateMaintence extends React.Component {
       ISERRORPRICE: false,
       ISERRORIMAGE: false,
       modalVisible: false,
-      ISSERRORCAR:false,
+      ISSERRORCAR: false,
       carno: { value: null, label: null },
       CARNO: []
     };
@@ -85,7 +85,7 @@ export default class CreateMaintence extends React.Component {
         self.setState({ CARNO: arr });
       })
       .catch(function (err) {
-        console.log("Create Maintenance Car List", err);
+        // console.log("Create Maintenance Car List", err);
       })
   }
 
@@ -149,7 +149,8 @@ export default class CreateMaintence extends React.Component {
           self.setState({ isOpenSuccessModel: true, modalVisible: false });
         })
         .catch(function (err) {
-          console.log("Create Maintenance Error", err);
+          // console.log("Create Maintenance Error", err);
+          alert("Server Error");
           self.setState({ isOpenSuccessModel: false, modalVisible: false });
         });
     }
@@ -173,7 +174,7 @@ export default class CreateMaintence extends React.Component {
   _handleSelect(value, label) {
     this.setState({
       carno: { value: value, label: label },
-      ISSERRORCAR:false
+      ISSERRORCAR: false
     })
   }
 

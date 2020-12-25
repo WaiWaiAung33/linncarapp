@@ -86,7 +86,8 @@ export default class Home extends React.Component {
         });
       })
       .catch(function (err) {
-        console.log("Time Out Error", err);
+        // console.log("Time Out Error", err);
+        alert("Server Error")
         // alert(" Network error");
         // self.setState({loading:false})
       });
@@ -110,7 +111,7 @@ export default class Home extends React.Component {
     //     </View>
     //   </View>
     // ) : (
-      return(
+    return (
       <View style={styles.container}>
         <StatusBar style="auto" />
         <View style={styles.secondContainer}>
@@ -160,23 +161,23 @@ export default class Home extends React.Component {
               </TouchableOpacity>
             </View>
           ) : (
-            <View
-              style={{ flexDirection: "row", marginTop: 10, marginLeft: 10 }}
-            >
-              <View>
-                <Text style={styles.headerText}>Name</Text>
-                <Text style={[styles.headerText, { paddingTop: 10 }]}>
-                  Phone No
+              <View
+                style={{ flexDirection: "row", marginTop: 10, marginLeft: 10 }}
+              >
+                <View>
+                  <Text style={styles.headerText}>Name</Text>
+                  <Text style={[styles.headerText, { paddingTop: 10 }]}>
+                    Phone No
                 </Text>
+                </View>
+                <View style={{ paddingLeft: 10 }}>
+                  <Text style={styles.headerText}>{this.state.name}</Text>
+                  <Text style={[styles.headerText, { paddingTop: 10 }]}>
+                    {this.state.phoneno}
+                  </Text>
+                </View>
               </View>
-              <View style={{ paddingLeft: 10 }}>
-                <Text style={styles.headerText}>{this.state.name}</Text>
-                <Text style={[styles.headerText, { paddingTop: 10 }]}>
-                  {this.state.phoneno}
-                </Text>
-              </View>
-            </View>
-          )}
+            )}
         </View>
 
         <ScrollView>
@@ -272,7 +273,7 @@ export default class Home extends React.Component {
                 onPress={() => this.props.navigation.navigate("DriverList")}
               >
                 <View style={styles.secondCard}>
-                  <Image source={require("@images/driver.png")}style={{width:100,height:100}} />
+                  <Image source={require("@images/driver.png")} style={{ width: 100, height: 100 }} />
                 </View>
                 <Text style={styles.text}>Driver List</Text>
               </TouchableOpacity>

@@ -36,10 +36,10 @@ export default class EditMaintence extends React.Component {
       id: null,
       modalVisible: false,
       carstate: null,
-      car_id:null,
-      carno:null
+      car_id: null,
+      carno: null
     };
-   
+
   }
 
   async componentDidMount() {
@@ -47,14 +47,14 @@ export default class EditMaintence extends React.Component {
     const dirvername = await AsyncStorage.getItem("name");
     const dirver = await AsyncStorage.getItem("userid");
     const data = this.props.navigation.getParam("datas");
-    console.log(data);
+    // console.log(data);
     this.setState({
       access_token: access_token,
       dirvername: dirvername,
       dirverid: dirver,
       id: data.id,
       carno: data.car_no,
-      car_id:data.car_id,
+      car_id: data.car_id,
       dirvername: data.dname,
       amount: data.amount,
       reason: data.reason,
@@ -101,12 +101,13 @@ export default class EditMaintence extends React.Component {
         self.setState({ isOpenSuccessModel: true, modalVisible: false });
       })
       .catch(function (err) {
-        console.log("Create Maintenance Error", err);
+        alert("Server Error");
+        // console.log("Create Maintenance Error", err);
         self.setState({ isOpenSuccessModel: false, modalVisible: false });
       });
   };
 
- 
+
   //handle usertype
   _handleOnSelectCarno(value, label) {
     this.setState({
@@ -137,12 +138,12 @@ export default class EditMaintence extends React.Component {
           </View>
 
           <View style={styles.textInputContainer}>
-          <TextInput
+            <TextInput
               value={this.state.carno}
               // keyboardType="number-pad"
               style={styles.textInputStyle}
               editable={false}
-              // onChangeText={(value)=>this.setState({dirvername:value})}
+            // onChangeText={(value)=>this.setState({dirvername:value})}
             ></TextInput>
           </View>
         </View>
@@ -157,7 +158,7 @@ export default class EditMaintence extends React.Component {
               // keyboardType="number-pad"
               style={styles.textInputStyle}
               editable={false}
-              // onChangeText={(value)=>this.setState({dirvername:value})}
+            // onChangeText={(value)=>this.setState({dirvername:value})}
             ></TextInput>
           </View>
         </View>

@@ -85,7 +85,8 @@ export default class DriverList extends React.Component {
           isLoading: false,
           isFooterLoading: false,
         });
-        console.log("Driver List Error", err);
+        // console.log("Driver List Error", err);
+        alert("Server Error");
       });
   };
 
@@ -110,7 +111,7 @@ export default class DriverList extends React.Component {
       .catch(function (err) {
         // alert("Error");
         self.setState({ isLoading: false })
-        console.log("Driver List Error", err);
+        // console.log("Driver List Error", err);
       });
   };
 

@@ -34,7 +34,7 @@ export default class CarList extends React.Component {
       carno: "",
       keyword: "",
       arrIndex: null,
-      count:0
+      count: 0
     };
     // this.page = 1;
     this.CarListApi = new CarListApi();
@@ -67,11 +67,12 @@ export default class CarList extends React.Component {
           refreshing: false,
           isLoading: false,
           isFooterLoading: false,
-          count:response.data.count
+          count: response.data.count
         });
       })
       .catch(function (error) {
-        console.log("Car List", error);
+        // console.log("Car List", error);
+        alert("Server Error");
         self.setState({
           isLoading: false,
           refreshing: false,
@@ -90,15 +91,15 @@ export default class CarList extends React.Component {
     const { keyword } = this.state;
     this.CarListApi.getCarListbyID(keyword)
       .then(function (response) {
-        console.log(response.data);
+        // console.log(response.data);
         self.setState({
           // searchCarlist: response.data.car_list,
           carlist: [...self.state.carlist, ...response.data.car_list],
-          count:response.data.count
+          count: response.data.count
         });
       })
       .catch(function (error) {
-        console.log(error);
+        // console.log(error);
       });
   }
 
@@ -126,7 +127,7 @@ export default class CarList extends React.Component {
     if (this.state.isLoading) {
       return <Loading />;
     }
-    const { isSearched, carlist, searchCarlist,count } = this.state;
+    const { isSearched, carlist, searchCarlist, count } = this.state;
     const dataList = isSearched ? searchCarlist : carlist;
     return (
       <View style={{ flex: 1 }}>

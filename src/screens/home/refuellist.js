@@ -43,6 +43,7 @@ export default class RefuelList extends React.Component {
       carno: null,
       start_time: "",
       end_time: "",
+      count: null
     };
     this.page = 1;
   }
@@ -105,6 +106,7 @@ export default class RefuelList extends React.Component {
           isLoading: false,
           isFooterLoading: false,
           imagePath: response.data.data.path,
+          count: response.data.data.total
           // tempData: response.data.history.data,
         });
       })
@@ -131,7 +133,7 @@ export default class RefuelList extends React.Component {
     // alert(edate);
     this.state.data = [];
     var self = this;
-    self.setState({ isSearched: false });
+    self.setState({ isSearched: false, count: null });
     // console.log("Sart time",sdate);
     const url =
       GetRefuelApi +
@@ -160,6 +162,7 @@ export default class RefuelList extends React.Component {
           isLoading: false,
           isFooterLoading: false,
           imagePath: response.data.data.path,
+          count: response.data.data.total
           // tempData: response.data.history.data,
         });
       })
@@ -212,7 +215,7 @@ export default class RefuelList extends React.Component {
     if (this.state.isLoading) {
       return <Loading />;
     }
-    var { isSearched, data } = this.state;
+    var { isSearched, data, count } = this.state;
     // var dataList = isSearched ? searchTravel : data;
     var dataList = data;
 
@@ -282,6 +285,17 @@ export default class RefuelList extends React.Component {
             onDateChange={(date) => this._handleEndDate(date)}
           />
         </View>
+
+        <Text
+          style={{
+            color: "#0470DD",
+            margin: 10,
+            textAlign: "right",
+            fontSize: 16,
+          }}
+        >
+          Total = {count}
+        </Text>
 
         <FlatList
           showsVerticalScrollIndicator={false}

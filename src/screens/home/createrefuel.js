@@ -19,7 +19,7 @@ import LoadingModal from "@components/LoadingModal";
 
 //import api
 const axios = require("axios");
-import { CreateRefuelApi , CarlistApi} from "@api/Url";
+import { CreateRefuelApi, CarlistApi } from "@api/Url";
 import FormData from "form-data";
 
 export default class CreateRefuel extends React.Component {
@@ -36,10 +36,10 @@ export default class CreateRefuel extends React.Component {
       ISERRORKILO: false,
       ISERRORPRICE: false,
       ISERRORIMAGE: false,
-      ISERRORCAR:false,
+      ISERRORCAR: false,
       modalVisible: false,
-      carno:{value:null,label:null},
-      CARNO:[]
+      carno: { value: null, label: null },
+      CARNO: []
     };
     this.page = 0;
   }
@@ -53,7 +53,7 @@ export default class CreateRefuel extends React.Component {
       dirvername: dirvername,
       dirverid: dirver,
       carno: { value: this.props.navigation.getParam("car_id"), label: this.props.navigation.getParam("carno") }
-   
+
     });
     this._handleCarList();
     // console.log(this.props.navigation.getParam("car_id"));
@@ -73,19 +73,19 @@ export default class CreateRefuel extends React.Component {
         let data = response.data.car_list;
         let arr = [];
         data.map((data, index) => {
-          if(data.status == 0 || data.id == self.state.carno.value){
+          if (data.status == 0 || data.id == self.state.carno.value) {
             var obj = {
               value: data.id.toString(),
               label: data.car_no
             };
             arr.push(obj);
           }
-         
+
         });
         self.setState({ CARNO: arr });
       })
       .catch(function (err) {
-        console.log("Create Maintenance Car List",err);
+        // console.log("Create Maintenance Car List", err);
       })
   }
 
@@ -147,11 +147,12 @@ export default class CreateRefuel extends React.Component {
         })
         .catch(function (err) {
           self.setState({ isOpenSuccessModel: false, modalVisible: false });
+          alert("Server Error");
         });
     }
   };
 
- 
+
   //image
   _handleOnChooseImage(image) {
     this.setState({ imagePath: image.uri, ISERRORIMAGE: false });
@@ -168,10 +169,10 @@ export default class CreateRefuel extends React.Component {
   _handleSelect(value, label) {
     this.setState({
       carno: { value: value, label: label },
-      ISERRORCAR:false
+      ISERRORCAR: false
     })
   }
-  
+
   render() {
     // console.log(this.props.navigation.getParam("car_id"));
     return (
@@ -189,13 +190,13 @@ export default class CreateRefuel extends React.Component {
                 <Text style={styles.labelStyle}>Car No</Text>
               </View>
               <View style={styles.textInputContainer}>
-              <DropDown
-              value={this.state.carno}
-              widthContainer="100%"
-              options={this.state.CARNO}
-              onSelect={(value, label) => this._handleSelect(value,label)}
-            />
-              <ErrorText
+                <DropDown
+                  value={this.state.carno}
+                  widthContainer="100%"
+                  options={this.state.CARNO}
+                  onSelect={(value, label) => this._handleSelect(value, label)}
+                />
+                <ErrorText
                   errMessage="please select carno"
                   isShow={this.state.ISERRORCAR}
                 />
