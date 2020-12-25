@@ -36,6 +36,7 @@ export default class CreateRefuel extends React.Component {
       ISERRORKILO: false,
       ISERRORPRICE: false,
       ISERRORIMAGE: false,
+      ISERRORCAR:false,
       modalVisible: false,
       carno:{value:null,label:null},
       CARNO:[]
@@ -91,7 +92,11 @@ export default class CreateRefuel extends React.Component {
   //create car report
   _handleOnSave = async () => {
     let isError = false;
-
+    if (this.state.carno.value == null) {
+      // alert("Helo");
+      this.setState({ ISERRORCAR: true });
+      isError = true;
+    }
     if (this.state.Kilo == null) {
       // alert("Helo");
       this.setState({ ISERRORKILO: true });
@@ -162,7 +167,8 @@ export default class CreateRefuel extends React.Component {
 
   _handleSelect(value, label) {
     this.setState({
-      carno: { value: value, label: label }
+      carno: { value: value, label: label },
+      ISERRORCAR:false
     })
   }
   
@@ -189,6 +195,10 @@ export default class CreateRefuel extends React.Component {
               options={this.state.CARNO}
               onSelect={(value, label) => this._handleSelect(value,label)}
             />
+              <ErrorText
+                  errMessage="please select carno"
+                  isShow={this.state.ISERRORCAR}
+                />
               </View>
             </View>
 

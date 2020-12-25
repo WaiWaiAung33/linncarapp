@@ -36,6 +36,7 @@ export default class CreateMaintence extends React.Component {
       ISERRORPRICE: false,
       ISERRORIMAGE: false,
       modalVisible: false,
+      ISSERRORCAR:false,
       carno: { value: null, label: null },
       CARNO: []
     };
@@ -91,7 +92,11 @@ export default class CreateMaintence extends React.Component {
   //create car report
   _handleOnSave = async () => {
     let isError = false;
-
+    if (this.state.carno.value == null) {
+      // alert("Helo");
+      this.setState({ ISSERRORCAR: true });
+      isError = true;
+    }
     if (this.state.amount == null) {
       // alert("Helo");
       this.setState({ ISERRORPRICE: true });
@@ -167,7 +172,8 @@ export default class CreateMaintence extends React.Component {
 
   _handleSelect(value, label) {
     this.setState({
-      carno: { value: value, label: label }
+      carno: { value: value, label: label },
+      ISSERRORCAR:false
     })
   }
 
@@ -184,6 +190,10 @@ export default class CreateMaintence extends React.Component {
               widthContainer="100%"
               options={this.state.CARNO}
               onSelect={(value, label) => this._handleSelect(value, label)}
+            />
+            <ErrorText
+              errMessage="please select carno"
+              isShow={this.state.ISSERRORCAR}
             />
 
           </View>
