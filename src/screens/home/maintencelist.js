@@ -64,13 +64,21 @@ export default class RefuelList extends React.Component {
   //call api
   _getMaintence = async (page) => {
     var self = this;
+
+    // var date = Moment(new Date().getDate()).format("DD-MM-YYYY");
+    // console.log("Maintenance Date",date);
+    var date = new Date().getDate();
+    var month = new Date().getMonth() + 1;
+    var year = new Date().getFullYear();
+    var dates = date + "-" + month + "-" + year;
+    // console.log("Maintencance List",dates);
     const url =
       MaintenceListApi +
       page +
       "&start_date=" +
-      self.state.start_time +
+      dates +
       "&end_date=" +
-      self.state.end_time +
+      dates +
       "&driverId=" +
       self.state.dirverid;
     // console.log(url);
@@ -184,9 +192,15 @@ export default class RefuelList extends React.Component {
   //RefreshControl
 
   onRefresh = () => {
+    var date = new Date().getDate();
+    var month = new Date().getMonth() + 1;
+    var year = new Date().getFullYear();
+    var dates = date + "-" + month + "-" + year;
     this.setState({
       data: [],
       refreshing: true,
+      start_time: dates,
+      end_time: dates
     });
     this._getMaintence(this.page);
   };
@@ -302,7 +316,7 @@ export default class RefuelList extends React.Component {
           contentContainerStyle={{
             flexGrow: 1,
           }}
-          // onEndReached={() => this.handleLoadMore()}
+        // onEndReached={() => this.handleLoadMore()}
         />
 
         <View
@@ -310,7 +324,7 @@ export default class RefuelList extends React.Component {
             position: "absolute",
             right: 20,
             bottom: 40,
-            
+
           }}
         >
           <TouchableOpacity
