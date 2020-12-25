@@ -58,9 +58,10 @@ export default class RefuelList extends React.Component {
     });
 
     const { navigation } = this.props;
-    this.focusListener = navigation.addListener("didFocus", async () => {
-      await this._getRefuelList(this.page);
-    });
+    // this.focusListener = navigation.addListener("didFocus", async () => {
+    //   await this._getRefuelList(this.page);
+    // });
+    await this._getRefuelList(this.page);
   }
 
   //call api

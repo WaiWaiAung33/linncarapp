@@ -56,9 +56,10 @@ export default class RefuelList extends React.Component {
       carno: this.props.navigation.getParam("carno"),
     });
     const { navigation } = this.props;
-    this.focusListener = navigation.addListener("didFocus", async () => {
-      await this._getMaintence(this.page);
-    });
+    // this.focusListener = navigation.addListener("didFocus", async () => {
+    //   await this._getMaintence(this.page);
+    // });
+    await this._getMaintence(this.page);
   }
 
   //call api
