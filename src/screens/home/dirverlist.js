@@ -19,6 +19,7 @@ import Loading from "@components/Loading";
 //import api
 const axios = require("axios");
 import { driverlistapi } from "@api/Url";
+import DriverListApi from "@api/DriverListApi";
 
 export default class DriverList extends React.Component {
   constructor(props) {
@@ -33,8 +34,9 @@ export default class DriverList extends React.Component {
       count: null,
       search: "",
       arrIndex: null,
+
     };
-    this.page = 1;
+    this.DriverListApi = new DriverListApi();
   }
 
   async componentDidMount() {
@@ -44,35 +46,31 @@ export default class DriverList extends React.Component {
     });
 
     const { navigation } = this.props;
-    this.focusListener = navigation.addListener("didFocus", async () => {
-      await this._getDriverList(this.page);
-    });
+    this.setState({ isLoading: true }); // Start page loading
+    this._getDriverList();
+    // this.focusListener = navigation.addListener("didFocus", async () => {
+
+    // });
   }
 
   //call api
-  _getDriverList = async (page) => {
+  _getDriverList() {
     var self = this;
-    if (this.state.isSearched == true) {
-      this.setState({
+
+    if (self.state.isSearched) {
+      self.setState({
         data: [],
         isSearched: false,
+        search: ""
       });
     }
     var self = this;
-    const url = driverlistapi + page;
-    // console.log(url);
 
-    axios
-      .get(url, {
-        headers: {
-          Accept: "application/json",
-          Authorization: "Bearer " + self.state.access_token,
-        },
-      })
+    this.DriverListApi.getAllDriverList()
       .then(function (response) {
         // console.log("Driver List Api",response.data);
         self.setState({
-          data: [...self.state.data, ...response.data.data.data],
+          data: [...self.state.data, ...response.data.driver],
           count: response.data.count,
           refreshing: false,
           isLoading: false,
@@ -92,49 +90,36 @@ export default class DriverList extends React.Component {
   };
 
   //call api
-  _handleOnSearch = async (page) => {
+  _handleOnSearch = async () => {
     var self = this;
     self.state.data = [];
     self.state.count = null;
-    self.setState({ isSearched: false });
-    const url = driverlistapi + page + "&keyword=" + self.state.search;
-    // console.log(self.state.search);
-
-    axios
-      .get(url, {
-        headers: {
-          Accept: "application/json",
-          Authorization: "Bearer " + self.state.access_token,
-        },
-      })
+    self.setState({ isSearched: true, isLoading: true });
+    const { search } = this.state;
+    this.DriverListApi.getDriverListbyID(search)
       .then(function (response) {
         // console.log("Driver List Api",response.data);
         self.setState({
-          data: [...self.state.data, ...response.data.data.data],
+          data: [...self.state.data, ...response.data.driver],
           count: response.data.count,
-          refreshing: false,
-          isLoading: false,
-          isFooterLoading: false,
+          isLoading: false
+
           // tempData: response.data.history.data,
         });
       })
       .catch(function (err) {
         // alert("Error");
-        self.setState({
-          refreshing: false,
-          isLoading: false,
-          isFooterLoading: false,
-        });
+        self.setState({ isLoading: false })
         console.log("Driver List Error", err);
       });
   };
 
-  //retrieve More data
-  handleLoadMore = () => {
-    this.setState({ isFooterLoading: true }); // Start Footer loading
-    this.page = this.page + 1;
-    this._getDriverList(this.page); // method for API call
-  };
+  // //retrieve More data
+  // handleLoadMore = () => {
+  //   this.setState({ isFooterLoading: true }); // Start Footer loading
+  //   // this.page = this.page + 1;
+  //   this._getDriverList(); // method for API call
+  // };
 
   //renderfooter
   renderFooter = () => {
@@ -150,10 +135,10 @@ export default class DriverList extends React.Component {
 
   onRefresh = () => {
     this.setState({
-      // data: [],
+      data: [],
       refreshing: true,
     });
-    this._getDriverList(this.page);
+    this._getDriverList();
   };
 
   render() {
@@ -229,7 +214,7 @@ export default class DriverList extends React.Component {
           contentContainerStyle={{
             flexGrow: 1,
           }}
-          onEndReached={() => (!isSearched ? this.handleLoadMore() : {})}
+        // onEndReached={() => (!isSearched ? this.handleLoadMore() : {})}
         />
       </View>
     );
