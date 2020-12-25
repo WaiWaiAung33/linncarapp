@@ -19,7 +19,7 @@ import LoadingModal from "@components/LoadingModal";
 
 //import api
 const axios = require("axios");
-import { CreateRefuelApi } from "@api/Url";
+import { CreateRefuelApi , CarlistApi} from "@api/Url";
 import FormData from "form-data";
 
 export default class CreateRefuel extends React.Component {
@@ -37,8 +37,8 @@ export default class CreateRefuel extends React.Component {
       ISERRORPRICE: false,
       ISERRORIMAGE: false,
       modalVisible: false,
-      car_id:null,
-      carno:null
+      carno:{value:null,label:null},
+      CARNO:[]
     };
     this.page = 0;
   }
@@ -51,11 +51,41 @@ export default class CreateRefuel extends React.Component {
       access_token: access_token,
       dirvername: dirvername,
       dirverid: dirver,
-      car_id:this.props.navigation.getParam("car_id"),
-      carno:this.props.navigation.getParam("carno")
+      carno: { value: this.props.navigation.getParam("car_id"), label: this.props.navigation.getParam("carno") }
    
     });
+    this._handleCarList();
     // console.log(this.props.navigation.getParam("car_id"));
+  }
+
+  _handleCarList() {
+    var self = this;
+    axios
+      .get(CarlistApi, {
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer " + self.state.access_token,
+        }
+      })
+      .then(function (response) {
+        // console.log(response.data);
+        let data = response.data.car_list;
+        let arr = [];
+        data.map((data, index) => {
+          if(data.status == 0 || data.id == self.state.carno.value){
+            var obj = {
+              value: data.id.toString(),
+              label: data.car_no
+            };
+            arr.push(obj);
+          }
+         
+        });
+        self.setState({ CARNO: arr });
+      })
+      .catch(function (err) {
+        console.log("Create Maintenance Car List",err);
+      })
   }
 
   //create car report
@@ -87,7 +117,7 @@ export default class CreateRefuel extends React.Component {
       };
       const formData = new FormData();
       const { imagePath } = self.state;
-      formData.append("car_no", self.state.car_id);
+      formData.append("car_no", self.state.carno.value);
       formData.append("driver_name", self.state.dirverid);
       formData.append("kilo", self.state.Kilo);
       formData.append("price", self.state.price);
@@ -129,6 +159,13 @@ export default class CreateRefuel extends React.Component {
     });
     this.props.navigation.navigate("RefuelList");
   }
+
+  _handleSelect(value, label) {
+    this.setState({
+      carno: { value: value, label: label }
+    })
+  }
+  
   render() {
     // console.log(this.props.navigation.getParam("car_id"));
     return (
@@ -146,12 +183,12 @@ export default class CreateRefuel extends React.Component {
                 <Text style={styles.labelStyle}>Car No</Text>
               </View>
               <View style={styles.textInputContainer}>
-              <TextInput
-                  value={this.state.carno}
-                  // keyboardType="number-pad"
-                  style={styles.textInputStyle}
-                  editable={false}
-                ></TextInput>
+              <DropDown
+              value={this.state.carno}
+              widthContainer="100%"
+              options={this.state.CARNO}
+              onSelect={(value, label) => this._handleSelect(value,label)}
+            />
               </View>
             </View>
 

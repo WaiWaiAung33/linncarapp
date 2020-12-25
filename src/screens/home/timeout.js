@@ -185,7 +185,7 @@ export default class TimeOut extends React.Component {
         type: `image/${fileExtension}`,
       });
     }
-    console.log(formData);
+    /*console.log(formData);*/
     const url = timeoutApi + self.state.report_id;
     axios
       .post(url, formData, {
