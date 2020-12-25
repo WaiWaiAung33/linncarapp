@@ -19,7 +19,7 @@ import LoadingModal from "@components/LoadingModal";
 
 //import api
 const axios = require("axios");
-import { CarCreateApi } from "@api/Url";
+import { CarCreateApi, CarlistApi } from "@api/Url";
 import FormData from "form-data";
 
 export default class CreateCar extends React.Component {
@@ -31,8 +31,8 @@ export default class CreateCar extends React.Component {
       usagename: "",
       reason: "",
       startkilo: "",
-     car_id:null,
-     carno:null,
+      //  car_id:null,
+      //  carno:null,
       access_token: null,
       dirverid: null,
       imagePath: null,
@@ -45,6 +45,8 @@ export default class CreateCar extends React.Component {
       ISERRORKILO: false,
       ISERRORIMAGE: false,
       modalVisible: false,
+      carno: { value: null, label: null },
+      CARNO: []
     };
     this.page = 0;
   }
@@ -59,16 +61,52 @@ export default class CreateCar extends React.Component {
       dirverid: dirver,
       dirvername: dirvername,
       startkilo: this.props.navigation.getParam("data").end_kilo,
-      car_id:this.props.navigation.getParam("data").id,
-      carno:this.props.navigation.getParam("data").car_no
+      carno: { value: this.props.navigation.getParam("data").id, label: this.props.navigation.getParam("data").car_no }
     });
-
+    this._handleCarList();
     // console.log(this.props.navigation.getParam("car_id"));
     this.Clock = setInterval(() => this.GetTime(), 1000);
   }
 
+  _handleCarList() {
+    var self = this;
+    axios
+      .get(CarlistApi, {
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer " + self.state.access_token,
+        }
+      })
+      .then(function (response) {
+        // console.log(response.data);
+        let data = response.data.car_list;
+        let arr = [];
+        data.map((data, index) => {
+          if (data.status == 0 || data.id == self.state.carno.value) {
+            var obj = {
+              value: data.id.toString(),
+              label: data.car_no
+            };
+            arr.push(obj);
+          }
+
+        });
+        self.setState({ CARNO: arr });
+      })
+      .catch(function (err) {
+        console.log("Create Car List", err);
+      })
+  }
+
+
   componentWillUnmount() {
     clearInterval(this.Clock);
+  }
+
+  _handleSelect(value, label) {
+    this.setState({
+      carno: { value: value, label: label }
+    })
   }
 
   //gettime
@@ -133,7 +171,7 @@ export default class CreateCar extends React.Component {
     });
   }
 
- 
+
 
   //create car report
   _handleOnSave = async () => {
@@ -143,7 +181,7 @@ export default class CreateCar extends React.Component {
       this.setState({ ISERRORSTARTPLACE: true });
       isError = true;
     }
-  
+
     if (this.state.name == "") {
       // alert("Helo");
       this.setState({ ISERRORNAME: true });
@@ -169,7 +207,7 @@ export default class CreateCar extends React.Component {
       };
       const formData = new FormData();
       const { imagePath } = self.state;
-      formData.append("car_id", self.state.car_id);
+      formData.append("car_id", self.state.carno.value);
       formData.append("driver_id", self.state.dirverid);
       formData.append("start_place", self.state.startplace);
       formData.append("reason", self.state.reason);
@@ -249,13 +287,13 @@ export default class CreateCar extends React.Component {
               <Text style={styles.labelStyle}>Car No</Text>
             </View>
             <View style={styles.textInputContainer}>
-            <TextInput
-                // keyboardType="number-pad"
-                style={styles.textInputStyle}
-                value={this.state.carno}
-                editable={false}
-              ></TextInput>
-    
+            <DropDown
+              value={this.state.carno}
+              widthContainer="100%"
+              options={this.state.CARNO}
+              onSelect={(value, label) => this._handleSelect(value, label)}
+            />
+
             </View>
           </View>
 
@@ -344,7 +382,7 @@ export default class CreateCar extends React.Component {
                 // keyboardType="number-pad"
                 style={styles.textInputStyle}
                 editable={false}
-                // onChangeText={(value)=>this.setState({startkilo:value})}
+              // onChangeText={(value)=>this.setState({startkilo:value})}
               ></TextInput>
             </View>
           </View>

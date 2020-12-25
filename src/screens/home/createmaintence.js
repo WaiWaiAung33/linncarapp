@@ -72,19 +72,19 @@ export default class CreateMaintence extends React.Component {
         let data = response.data.car_list;
         let arr = [];
         data.map((data, index) => {
-          if(data.status == 0 || data.id == self.state.id){
+          if (data.status == 0 || data.id == self.state.carno.value) {
             var obj = {
               value: data.id.toString(),
               label: data.car_no
             };
             arr.push(obj);
           }
-         
+
         });
         self.setState({ CARNO: arr });
       })
       .catch(function (err) {
-        console.log("Create Maintenance Car List",err);
+        console.log("Create Maintenance Car List", err);
       })
   }
 
@@ -183,9 +183,9 @@ export default class CreateMaintence extends React.Component {
               value={this.state.carno}
               widthContainer="100%"
               options={this.state.CARNO}
-              onSelect={(value, label) => this._handleSelect(value,label)}
+              onSelect={(value, label) => this._handleSelect(value, label)}
             />
-           
+
           </View>
         </View>
 
