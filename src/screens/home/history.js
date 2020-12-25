@@ -40,6 +40,7 @@ export default class History extends React.Component {
       start_time: "",
       end_time: "",
       isSearched: false,
+      count:""
     };
     this.page = 1;
   }
@@ -109,11 +110,11 @@ export default class History extends React.Component {
         },
       })
       .then(function (response) {
-        // console.log(response.data);
+        // console.log("History List",response.data);
         self.setState({
           data: [...self.state.data, ...response.data.data.data],
           // data: response.data.data.data,
-          count: response.data.count,
+          count: response.data.data.total,
           refreshing: false,
           isLoading: false,
           isFooterLoading: false,
@@ -146,6 +147,7 @@ export default class History extends React.Component {
     // alert("Hello")
     // alert(sdate);
     this.state.data = [];
+    this.count = "";
     var self = this;
     self.setState({ isSearched: false });
     // console.log("Sart time",sdate);
@@ -172,7 +174,7 @@ export default class History extends React.Component {
         self.setState({
           data: [...self.state.data, ...response.data.data.data],
           // data: response.data.data.data,
-          count: response.data.count,
+          count: response.data.data.total,
           refreshing: false,
           isLoading: false,
           isFooterLoading: false,
@@ -235,7 +237,7 @@ export default class History extends React.Component {
     if (this.state.isLoading) {
       return <Loading />;
     }
-    var { isSearched, data } = this.state;
+    var { isSearched, data , count} = this.state;
     // var dataList = isSearched ? searchTravel : data;
     var dataList = data;
     return (
@@ -285,6 +287,16 @@ export default class History extends React.Component {
             onDateChange={(date) => this._handleEndDate(date)}
           />
         </View>
+        <Text
+          style={{
+            color: "#0470DD",
+            margin: 10,
+            textAlign: "right",
+            fontSize: 16,
+          }}
+        >
+          Total = {count}
+        </Text>
 
         <FlatList
           showsVerticalScrollIndicator={false}
