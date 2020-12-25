@@ -40,7 +40,7 @@ export default class History extends React.Component {
       start_time: "",
       end_time: "",
       isSearched: false,
-      count:""
+      count: ""
     };
     this.page = 1;
   }
@@ -56,48 +56,27 @@ export default class History extends React.Component {
 
     const { navigation } = this.props;
     await this._gethistory(this.page);
-    await this._getNewDate();
     // this.focusListener = navigation.addListener("didFocus", async () => {
-     
+
     // });
-  }
-
-  async _getNewDate() {
-    var today = new Date();
-    var dd = today.getDate();
-
-    var mm = today.getMonth() + 1;
-    var yyyy = today.getFullYear();
-    if (dd < 10) {
-      dd = "0" + dd;
-    }
-
-    if (mm < 10) {
-      mm = "0" + mm;
-    }
-    today = dd + "-" + mm + "-" + yyyy;
-    this.setState({
-      end_time: today,
-    });
   }
 
   //call api
   _gethistory = async (page) => {
-    if (this.state.isSearched == true) {
-      this.setState({
-        data: [],
-        isSearched: false,
-      });
-    }
+
     var self = this;
+    var date = new Date().getDate();
+    var month = new Date().getMonth() + 1;
+    var year = new Date().getFullYear();
+    var dates = date + "-" + month + "-" + year;
     // console.log("Sart time",self.state.start_date);
     const url =
       gethistoryapi +
       page +
       "&start_date=" +
-      self.state.start_time +
+      dates +
       "&end_date=" +
-      self.state.end_time +
+      dates +
       "&driverId=" +
       self.state.dirverid;
     // console.log(url);
@@ -170,7 +149,7 @@ export default class History extends React.Component {
         },
       })
       .then(function (response) {
-        // console.log(response.data);
+        console.log(response.data);
         self.setState({
           data: [...self.state.data, ...response.data.data.data],
           // data: response.data.data.data,
@@ -225,9 +204,15 @@ export default class History extends React.Component {
   //RefreshControl
 
   onRefresh = () => {
+    var date = new Date().getDate();
+    var month = new Date().getMonth() + 1;
+    var year = new Date().getFullYear();
+    var dates = date + "-" + month + "-" + year;
     this.setState({
       data: [],
       refreshing: true,
+      start_time: dates,
+      end_time: dates
     });
     this._gethistory(this.page);
   };
@@ -237,7 +222,7 @@ export default class History extends React.Component {
     if (this.state.isLoading) {
       return <Loading />;
     }
-    var { isSearched, data , count} = this.state;
+    var { isSearched, data, count } = this.state;
     // var dataList = isSearched ? searchTravel : data;
     var dataList = data;
     return (
@@ -331,7 +316,7 @@ export default class History extends React.Component {
           contentContainerStyle={{
             flexGrow: 1,
           }}
-          // onEndReached={() =>(isSearched == false ? this.handleLoadMore() : {})}
+        // onEndReached={() =>(isSearched == false ? this.handleLoadMore() : {})}
         />
       </View>
     );
